@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BoxOFFICE 4 CUK</string>
+    <string name="name_tab1_movies">Film</string>
+    <string name="name_tab2_tvshow">Acara Tv</string>
+    <string name="name_setting_lang">Pengaturan Bahasa</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</string>
+    <string name="desc_img">Gambar</string>
+    <string name="str_overview">DESKRIPSI</string>
+    <string name="str_detail">Detail</string>
+    <string name="str_no_internet">Tidak ada koneksi internet..</string>
+    <string name="str_try_again">Coba Lagi</string>
+    <string name="str_reconnect">Menghubungkan ke jaringan..</string>
+    <string name="str_wrong_net">Terjadi kesalahan jaringan..</string>
+    <string name="str_error_wrong">Terjadi kesalahan..</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="favorite">Favorit Saya</string>
+    <string name="tap_to_close">Tap 2x untuk keluar</string>
+    <string name="str_msg_add_fav">Ditambahkan ke daftar favorit saya..</string>
+    <string name="str_msg_delete_fav">Dihapus dari daftar favorit saya..</string>
+    <string name="movies_empty">Daftar film favorit anda masih kosong..</string>
+    <string name="empty_tvshows">Daftar acara tv favorit anda masih kosong..</string>
+    <string name="search_hint">Telusuri</string>
+</resources>

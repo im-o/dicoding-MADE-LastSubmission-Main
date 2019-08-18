@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:paddingStart="@dimen/margin_size_low_small"
+    android:paddingEnd="@dimen/margin_size_low_small"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_size_low"
+        android:layout_marginTop="@dimen/margin_size_low"
+        app:cardCornerRadius="@dimen/size_corner_low"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/card_img"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_item_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_size_low"
+            android:layout_marginTop="@dimen/margin_size_low_small"
+            android:layout_marginEnd="@dimen/margin_size_low"
+            android:layout_marginBottom="@dimen/margin_size_low_small"
+            android:drawableEnd="@drawable/ic_star_black_24dp"
+            android:drawablePadding="@dimen/margin_size_low_small"
+            android:textSize="@dimen/size_text_low"
+            tools:text="9.9" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_img"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_size_low"
+        android:layout_marginTop="@dimen/margin_size_low"
+        android:layout_marginEnd="@dimen/margin_size_low"
+        android:layout_marginBottom="@dimen/margin_size_low"
+        app:cardCornerRadius="@dimen/size_corner_low"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/img_item_photo"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/desc_img"
+            android:scaleType="centerCrop"
+            tools:src="@color/colorPrimary" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_desc"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_size_low"
+        android:layout_marginTop="@dimen/margin_size_low"
+        android:layout_marginEnd="@dimen/margin_size_low"
+        android:layout_marginBottom="@dimen/margin_size_low"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/bg_onclick_transparant"
+        app:cardCornerRadius="@dimen/size_corner_low"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/card_img"
+        app:layout_constraintTop_toBottomOf="@+id/card_view_rating"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tv_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_size_low"
+            android:layout_marginTop="@dimen/margin_size_low"
+            android:layout_marginEnd="@dimen/margin_size_low"
+            android:layout_marginBottom="@dimen/margin_size_low"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="@string/lorem" />
+
+        <TextView
+            android:id="@+id/tv_item_release"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_item_title"
+            android:layout_marginStart="@dimen/margin_size_low"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="@dimen/margin_size_low"
+            android:maxLines="1"
+            android:textSize="@dimen/size_text_small_low"
+            tools:text="12 Desember 2019" />
+
+        <TextView
+            android:id="@+id/tv_item_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_item_release"
+            android:layout_marginStart="@dimen/margin_size_low"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="@dimen/margin_size_normal"
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="@dimen/size_text_normal"
+            tools:text="@string/lorem" />
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
