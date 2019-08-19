@@ -30,7 +30,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     private String KEY_DAILY = "key_pref_daily";
     private String KEY_RELEASE = "key_pref_release";
     private ConstraintLayout containerConstraint;
-    private AlarmReceiver alarmReceiver;
+    private AlarmReceiverDaily alarmReceiverDaily;
+    private AlarmReceiverRelease alarmReceiverRelease;
     private int jobId = 10;
 
     @Override
@@ -43,7 +44,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         llBtnSettLang = findViewById(R.id.ll_btn_lang_settings);
         containerConstraint = findViewById(R.id.coordinator_reminder);
 
-        alarmReceiver = new AlarmReceiver();
+        alarmReceiverDaily = new AlarmReceiverDaily();
+        alarmReceiverRelease = new AlarmReceiverRelease();
 
         llBtnSettLang.setOnClickListener(this);
         switchDaily.setOnClickListener(this);
@@ -131,33 +133,20 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         editor.apply();
     }
 
-    private void setAlarm(){
-        alarmReceiver.setOneTimeAlarm(this, AlarmReceiver.TYPE_REPEATING,"INI PESAN");
+    private void setAlarmDaily(){
+        alarmReceiverDaily.setOneTimeAlarm(this, AlarmReceiverDaily.TYPE_REPEATING,"INI PESAN");
     }
 
-    private void rebortAlarm() {
-        alarmReceiver.cancelAlarm(this, AlarmReceiver.TYPE_REPEATING);
+    private void rebortAlarmDaily() {
+        alarmReceiverDaily.cancelAlarm(this, AlarmReceiverDaily.TYPE_REPEATING);
     }
 
-    private void startJob(){
-        ComponentName mServiceComponent = new ComponentName(this, GetMovieReleaseService.class);
-        JobInfo.Builder builder = new JobInfo.Builder(jobId, mServiceComponent);
-        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
-        builder.setRequiresDeviceIdle(false);
-        builder.setRequiresCharging(false);
-
-        // 1000 ms = 1 detik
-        builder.setPeriodic(40000);
-        JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(builder.build());
-        Toast.makeText(this, "Job Service started", Toast.LENGTH_SHORT).show();
+    private void setAlarmRelease(){
+        alarmReceiverRelease.setReleaseAlarm(this, AlarmReceiverRelease.TYPE_REPEATING,"INI PESAN");
     }
 
-    private void cancelJob(){
-        JobScheduler tm = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        tm.cancel(jobId);
-        Toast.makeText(this, "Job Service canceled", Toast.LENGTH_SHORT).show();
-//        finish();
+    private void rebortAlarmRelease() {
+        alarmReceiverRelease.cancelAlarmRelease(this, AlarmReceiverRelease.TYPE_REPEATING);
     }
 
     private void showSnackbar(String msg) {
@@ -174,19 +163,19 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         } else if (id == switchDaily.getId()) {
             if (switchDaily.isChecked()) {
-                setAlarm();
+                setAlarmDaily();
                 showSnackbar("Reminder for return to app is enable, and will notify 07:00 am");
             } else {
-                rebortAlarm();
+                rebortAlarmDaily();
                 showSnackbar("Reminder for return to app is rebort");
             }
 
         } else if (id == switchRelease.getId()) {
             if (switchRelease.isChecked()) {
-                startJob();
+                setAlarmRelease();
                 showSnackbar("Reminder showing the movie that released today is enable, and will notify 08:00 am");
             } else {
-                cancelJob();
+                rebortAlarmRelease();
                 showSnackbar("Reminder showing the movie that released today is rebort");
             }
         }
