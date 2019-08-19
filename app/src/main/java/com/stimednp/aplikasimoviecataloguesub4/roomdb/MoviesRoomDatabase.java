@@ -31,6 +31,10 @@ public abstract class MoviesRoomDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    public static void switchToInMemory(Context context){
+        INSTANCE = Room.inMemoryDatabaseBuilder(context.getApplicationContext(), MoviesRoomDatabase.class).build();
+    }
 }
 
 

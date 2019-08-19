@@ -27,4 +27,7 @@
     <string name="add_widget">Add widget</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="no_data">No Data</string>
+    <string name="reminder_showing">Reminder showing the movie that released today</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="reminder_return">Reminder for return to app</string>
 </resources>

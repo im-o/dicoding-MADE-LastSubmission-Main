@@ -32,7 +32,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     private ConstraintLayout containerConstraint;
     private AlarmReceiverDaily alarmReceiverDaily;
     private AlarmReceiverRelease alarmReceiverRelease;
-    private int jobId = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,19 +133,19 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setAlarmDaily(){
-        alarmReceiverDaily.setOneTimeAlarm(this, AlarmReceiverDaily.TYPE_REPEATING,"INI PESAN");
+        alarmReceiverDaily.setOneTimeAlarm(this);
     }
 
     private void rebortAlarmDaily() {
-        alarmReceiverDaily.cancelAlarm(this, AlarmReceiverDaily.TYPE_REPEATING);
+        alarmReceiverDaily.cancelAlarm(this);
     }
 
     private void setAlarmRelease(){
-        alarmReceiverRelease.setReleaseAlarm(this, AlarmReceiverRelease.TYPE_REPEATING,"INI PESAN");
+        alarmReceiverRelease.setReleaseAlarm(this);
     }
 
     private void rebortAlarmRelease() {
-        alarmReceiverRelease.cancelAlarmRelease(this, AlarmReceiverRelease.TYPE_REPEATING);
+        alarmReceiverRelease.cancelAlarmRelease(this);
     }
 
     private void showSnackbar(String msg) {

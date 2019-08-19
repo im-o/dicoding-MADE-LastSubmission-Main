@@ -1,7 +1,9 @@
 package com.stimednp.aplikasimoviecataloguesub4.roommovies;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,36 +12,50 @@ import androidx.room.PrimaryKey;
 /**
  * Created by rivaldy on 8/4/2019.
  */
-@Entity(tableName = "movies")
+@Entity(tableName = Movies.TABLE_NAME)
 public class Movies implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    public static final String TABLE_NAME = "movies";
+    public static final String COLUMN_ID = BaseColumns._ID;
+    public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_ORI_TITLE = "original_title";
+    public static final String COLUMN_RELEASE_DATE = "release_date";
+    public static final String COLUMN_VOTE_AVERAGE = "vote_average";
+    public static final String COLUMN_VOTE_COUNT = "vote_count";
+    public static final String COLUMN_OVERVIEW = "overview";
+    public static final String COLUMN_POSTER_PATH = "poster_path";
+    public static final String COLUMN_BACK_PATH = "backdrop_path";
+    public static final String COLUMN_ISFAVORITE = "isFavorite";
 
-    @ColumnInfo(name = "title")
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(index = true, name = COLUMN_ID)
+    public int id;
+
+    @ColumnInfo(name = COLUMN_TITLE)
     private String title;
 
-    @ColumnInfo(name = "original_title")
+    @ColumnInfo(name = COLUMN_ORI_TITLE)
     private String original_title;
 
-    @ColumnInfo(name = "release_date")
+    @ColumnInfo(name = COLUMN_RELEASE_DATE)
     private String release_date;
 
-    @ColumnInfo(name = "vote_average")
+    @ColumnInfo(name = COLUMN_VOTE_AVERAGE)
     private Double vote_average;
 
-    @ColumnInfo(name = "vote_count")
+    @ColumnInfo(name = COLUMN_VOTE_COUNT)
     private String vote_count;
 
-    @ColumnInfo(name = "overview")
+    @ColumnInfo(name = COLUMN_OVERVIEW)
     private String overview;
 
-    @ColumnInfo(name = "poster_path")
+    @ColumnInfo(name = COLUMN_POSTER_PATH)
     private String poster_path;
 
-    @ColumnInfo(name = "backdrop_path")
+    @ColumnInfo(name = COLUMN_BACK_PATH)
     private String backdrop_path;
 
-    @ColumnInfo(name = "isFavorite")
+    @ColumnInfo(name = COLUMN_ISFAVORITE )
     private boolean isFavorite;
 
     public int getId() {
@@ -128,6 +144,17 @@ public class Movies implements Parcelable {
         return 0;
     }
 
+    public static Movies fromContentValues(ContentValues values){
+        final Movies movies = new Movies();
+        if (values.containsKey(COLUMN_ID)){
+            movies.id = values.getAsInteger(COLUMN_ID);
+        }
+        if (values.containsKey(COLUMN_TITLE)){
+            movies.title = values.getAsString(COLUMN_TITLE);
+        }
+        return movies;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
@@ -158,7 +185,7 @@ public class Movies implements Parcelable {
         this.isFavorite = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Movies> CREATOR = new Parcelable.Creator<Movies>() {
+    public static final Creator<Movies> CREATOR = new Creator<Movies>() {
         @Override
         public Movies createFromParcel(Parcel source) {
             return new Movies(source);

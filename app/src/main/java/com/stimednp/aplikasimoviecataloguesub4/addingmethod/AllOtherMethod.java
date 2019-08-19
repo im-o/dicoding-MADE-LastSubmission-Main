@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -22,6 +23,11 @@ public class AllOtherMethod {
             e.printStackTrace();
         }
         return changeFormat;
+    }
+
+    public static String getCurrentDates() {
+        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(Calendar.getInstance().getTime());
     }
 
     public String getLastYear(String setReleasedate) { //get year exp : (2018)

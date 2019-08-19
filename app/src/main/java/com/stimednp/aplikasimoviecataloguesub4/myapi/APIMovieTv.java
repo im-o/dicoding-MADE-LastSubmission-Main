@@ -33,11 +33,11 @@ public interface APIMovieTv {
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("query") String searchQuery);
-
-
-    @GET("discover/movie")
-    Call<MoviesResponse> getMovieRelease(
-            @Query("api_key") String apiKey,
-            @Query("primary_release_date.gte") String releaseDateGte,
-            @Query("primary_release_date.lte") String releaseDateLte);
+//
+//
+//    @GET("discover/movie")
+//    Call<MoviesResponse> getMovieRelease(
+//            @Query("api_key") String apiKey,
+//            @Query("primary_release_date.gte") String releaseDateGte,
+//            @Query("primary_release_date.lte") String releaseDateLte);
 }

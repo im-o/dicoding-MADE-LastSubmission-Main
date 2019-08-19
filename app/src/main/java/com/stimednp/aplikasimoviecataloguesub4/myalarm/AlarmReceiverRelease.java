@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.stimednp.aplikasimoviecataloguesub4.R;
+import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
 
 import org.json.JSONObject;
 
@@ -33,23 +34,19 @@ import cz.msebera.android.httpclient.Header;
 
 public class AlarmReceiverRelease extends BroadcastReceiver {
     private static final String API_KEY = "8b904530a7aced766995fa063ed27355";
-    public static final String EXTRA_TIME_RELEASE = "2019-08-19";
-
-    public static final String TYPE_REPEATING = "MY MOVIE CATALOGUE LAST";
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String EXTRA_TYPE = "type";
     private static final String TAG = AlarmReceiverRelease.class.getSimpleName();
-    private final int ID_REPEATING = 102;
+    private int notifId = (int) (-1 * System.currentTimeMillis());
 
     public AlarmReceiverRelease() {
     }
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        Log.d(TAG, "Running");
+        String currentDate = AllOtherMethod.getCurrentDates();
+        Log.d(TAG, "Running date : " + currentDate);
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&primary_release_date.gte=" + EXTRA_TIME_RELEASE + "&primary_release_date.lte=" + EXTRA_TIME_RELEASE;
-        Log.e(TAG, "getCurrentWeather: " + url);
+        String url = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&primary_release_date.gte=" + currentDate + "&primary_release_date.lte=" + currentDate;
+        Log.e(TAG, "getCurrentthemoviedb: " + url);
         client.get(url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -60,12 +57,9 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
                     int totalResult = responseObject.getInt("total_results");
                     for (int i = 0; i < totalResult; i++) {
                         String titleMovie = responseObject.getJSONArray("results").getJSONObject(i).getString("title");
-                        String strRelease = "Is release today";
-
+                        String strRelease = context.getResources().getString(R.string.str_release);
                         String message = titleMovie + ", " + strRelease;
-                        int notifId = 10 + i;
-
-                        showAlarmNotification(context, titleMovie, message, notifId);
+                        showAlarmNotification(context, titleMovie, message, notifId+i);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -80,17 +74,15 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
 
     }
 
-    public void setReleaseAlarm(Context context, String type, String message) {
+    public void setReleaseAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverRelease.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        intent.putExtra(EXTRA_TYPE, type);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 20);
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID_REPEATING, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
         if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -126,10 +118,10 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
         }
     }
 
-    public void cancelAlarmRelease(Context context, String type) {
+    public void cancelAlarmRelease(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverRelease.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID_REPEATING, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
         pendingIntent.cancel();
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);

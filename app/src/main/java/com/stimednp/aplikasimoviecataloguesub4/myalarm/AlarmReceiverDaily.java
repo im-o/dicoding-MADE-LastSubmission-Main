@@ -25,26 +25,20 @@ import java.util.Calendar;
  */
 
 public class AlarmReceiverDaily extends BroadcastReceiver {
-    public static final String TYPE_REPEATING = "MY MOVIE CATALOGUE LAST";
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String EXTRA_TYPE = "type";
     private int notifId = (int) (-1 * System.currentTimeMillis());
-
     public AlarmReceiverDaily() {
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String type = context.getResources().getString(R.string.app_name);
-        String message = "Catalogue Movie missing you!";
+        String message = context.getResources().getString(R.string.str_missingu);
         showAlarmNotification(context, type, message, notifId);
     }
 
-    public void setOneTimeAlarm(Context context, String type, String message) {
+    public void setOneTimeAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverDaily.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
-        intent.putExtra(EXTRA_TYPE, type);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 7);
@@ -59,7 +53,7 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
 
     private void showAlarmNotification(Context context, String title, String message, int notifId) {
         String CHANNEL_ID = "Channel_1";
-        String CHANNEL_NAME = "AlarmManager channel";
+        String CHANNEL_NAME = "AlarmManagerDaily channel";
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -84,7 +78,7 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
         }
     }
 
-    public void cancelAlarm(Context context, String type) {
+    public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverDaily.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
@@ -92,6 +86,5 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
         }
-        Toast.makeText(context, "Repeating alarm dibatalkan", Toast.LENGTH_SHORT).show();
     }
 }
