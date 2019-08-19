@@ -51,6 +51,7 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        setHasOptionsMenu(true);// calll fung menu
         textViewEmpty = view.findViewById(R.id.tv_movies_empty);
         progressBarMovie = view.findViewById(R.id.progressbar_tab_movies_room);
         refreshLayoutMovie = view.findViewById(R.id.swipe_scroll_movie_room);

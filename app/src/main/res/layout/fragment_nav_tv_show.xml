@@ -21,12 +21,18 @@
             tools:listitem="@layout/item_card_list_movie" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <ProgressBar
-        android:layout_centerInParent="true"
-        android:id="@+id/progressbar_tab_tvshow"
+    <TextView
+        android:id="@+id/tv_db_tvshow_empty"
+        style="@style/TextAppearance.MaterialComponents.Headline4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="visible" />
+        android:layout_centerInParent="true"
+        android:padding="32dp"
+        android:text="@string/db_empty_tvshows"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDividerDark"
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavFavoritesFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class NavFavoritesFragment extends Fragment{
     Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -45,12 +46,12 @@ public class NavFavoritesFragment extends Fragment implements SearchView.OnQuery
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
         viewPager = view.findViewById(R.id.view_pager_favorite);
         setupViewPager();
         tabLayout = view.findViewById(R.id.tab_layout_favorite);
         tabLayout.setupWithViewPager(viewPager);
         setTabIcon();
-        setHasOptionsMenu(true);
     }
 
     private void setTabIcon() {
@@ -105,20 +106,11 @@ public class NavFavoritesFragment extends Fragment implements SearchView.OnQuery
     };
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        SearchView searchView = (SearchView) menu.findItem(R.id.itemm_search).getActionView();
-        searchView.setOnQueryTextListener(this);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Toast.makeText(getContext(), "Favorite : "+query, Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.itemm_search);
+        if (item != null){
+            item.setVisible(false);
+        }
     }
 }

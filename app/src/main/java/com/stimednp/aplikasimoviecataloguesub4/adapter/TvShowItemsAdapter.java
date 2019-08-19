@@ -96,10 +96,14 @@ public class TvShowItemsAdapter extends RecyclerView.Adapter<TvShowItemsAdapter.
             String imgUrl = tvShowItems.getPoster_path();
 
             AllOtherMethod allOtherMethod = new AllOtherMethod();
-            String myDate = allOtherMethod.changeFormatDate(release);
+            if (release != null){
+                String myDate = allOtherMethod.changeFormatDate(release);
+                tvRelease.setText(myDate);
+            } else {
+                tvRelease.setText(release);
+            }
 
             tvTitle.setText(title);
-            tvRelease.setText(myDate);
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
             Glide.with(context)

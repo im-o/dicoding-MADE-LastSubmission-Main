@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,19 +38,15 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
-    public static final String TAG = NavMoviesFragment.class.getSimpleName();
-    public static final String EXTRA_STR_SEARCH = "extra_str_search";
+public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView recyclerViewMovie;
     private MainViewModel mainViewModel;
     private MovieItemsAdapter movieItemsAdapter;
     private SwipeRefreshLayout refreshLayoutMovie;
     private RelativeLayout frameLayoutMovie;
-    private ProgressBar progressBarMovie;
-    private Boolean isSearch = false;
-    private SearchView searchView;
-    private String textSearch;
     private String noInternet, tryAgain, reconnect, wrongNet, wrongError;
+    private String textSearch;
+    private TextView textViewEmpty;
 
     public NavMoviesFragment() {
         // Required empty public constructor
@@ -64,7 +61,8 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        progressBarMovie = view.findViewById(R.id.progressbar_tab_movies);
+        setHasOptionsMenu(true);// method for menu search
+        textViewEmpty = view.findViewById(R.id.tv_db_movies_empty);
         refreshLayoutMovie = view.findViewById(R.id.swipe_scroll_movie);
         frameLayoutMovie = view.findViewById(R.id.framel_movie);
         recyclerViewMovie = view.findViewById(R.id.rv_tab_movies);
@@ -96,19 +94,22 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         public void onChanged(ArrayList<MovieItems> movieItems) {
             if (movieItemsAdapter != null) {
                 movieItemsAdapter.setMoviesData(movieItems);
-                showLoading(false);
+                if (movieItems.size() < 1 ) {
+                    textViewEmpty.setVisibility(View.VISIBLE);
+                } else {
+                    textViewEmpty.setVisibility(View.INVISIBLE);
+                }
                 timeRecyclerLoadFalse();
             }
         }
     };
 
     private void checkingNetwork() {
+        refreshLayoutMovie.setRefreshing(true);
         if (getContext() != null) {
-//            showRecyclerList(textSearch);
             if (CheckNetwork.isInternetAvailable(getContext())) {
                 int status = CheckNetwork.statusInternet;
                 if (status == 0) {//disconnect
-                    showLoading(false);
                     timeRecyclerLoadFalse();
                     Snackbar snackbar = Snackbar.make(frameLayoutMovie, noInternet, Snackbar.LENGTH_SHORT).setAction(tryAgain, new View.OnClickListener() {
                         @Override
@@ -131,36 +132,6 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
-//    private void showRecyclerList() {
-//        if (mainViewModel != null) {
-//            Log.d(TAG, "showRecyclerList isSearch : "+isSearch);
-//            if (isSearch){
-//                if (searchView != null){
-//                    String text = searchView.getQuery().toString();
-//                    mainViewModel.setSeacrhMovies(text);
-//                } else {
-//                    Toast.makeText(getContext(), "LOAD", Toast.LENGTH_SHORT).show();
-//                    mainViewModel.setListMovies();
-//                }
-//            } else {
-//                Toast.makeText(getContext(), "LOAD 2", Toast.LENGTH_SHORT).show();
-//                mainViewModel.setListMovies();
-//            }
-//            movieItemsAdapter.notifyDataSetChanged();
-//            recyclerViewMovie.setHasFixedSize(true);
-//            recyclerViewMovie.setLayoutManager(new LinearLayoutManager(getContext()));
-//            recyclerViewMovie.setAdapter(movieItemsAdapter);
-//        }
-//    }
-
-    private void showLoading(boolean state) {
-        if (state) {
-            progressBarMovie.setVisibility(View.VISIBLE);
-        } else {
-            progressBarMovie.setVisibility(View.GONE);
-        }
-    }
-
     private void timeRecyclerLoadFalse() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -180,31 +151,25 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        searchView = (SearchView) menu.findItem(R.id.itemm_search).getActionView();
-        searchView.setOnQueryTextListener(this);
+        SearchView searchView = (SearchView) menu.findItem(R.id.itemm_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                textSearch = query;
+                checkingNetwork();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                textSearch = newText;
+                checkingNetwork();
+                return true;
+            }
+        });
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        isSearch = true;
-        textSearch = query;
-        Toast.makeText(getContext(), "Movies : " + query, Toast.LENGTH_SHORT).show();
-        checkingNetwork();
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        isSearch = true;
-        textSearch = newText;
-        checkingNetwork();
-        if (newText == null) {
-            Log.d(TAG, "onQueryTextChange: NULLLL");
-        } else if (newText.equals("")) {
-            Log.d(TAG, "onQueryTextChange: STRING NULL");
-        }
-        return false;
-    }
 
     private void showRecyclerList(String query) {
         if (mainViewModel != null) {

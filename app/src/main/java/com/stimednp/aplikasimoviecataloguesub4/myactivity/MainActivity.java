@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.stimednp.aplikasimoviecataloguesub4.R;
+import com.stimednp.aplikasimoviecataloguesub4.myalarm.ReminderActivity;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavFavoritesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavMoviesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavTvShowFragment;
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_top_right_appbar, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        if (searchManager != null){
+        if (searchManager != null) {
             SearchView searchView = (SearchView) (menu.findItem(R.id.itemm_search)).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setQueryHint(getResources().getString(R.string.search_hint));
@@ -135,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.change_set_lang) {
-            Intent changeLangIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
-            startActivity(changeLangIntent);
+        if (id == R.id.itemm_reminder) {
+            Intent intent = new Intent(MainActivity.this, ReminderActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -101,12 +101,16 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             String imgUrl = movieItems.getPoster_path();
 
             AllOtherMethod allOtherMethod = new AllOtherMethod();
-            String myDate = allOtherMethod.changeFormatDate(release);
+            if (release != null){
+                String myDate = allOtherMethod.changeFormatDate(release);
+                tvRelease.setText(myDate);
+            } else {
+                tvRelease.setText(release);
+            }
 
             tvTitle.setText(title);
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
-            tvRelease.setText(myDate);
             Glide.with(context)
                     .load(pathImg + imgUrl)
                     .into(imgvPoster);
