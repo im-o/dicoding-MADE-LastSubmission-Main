@@ -2,6 +2,7 @@ package com.stimednp.aplikasimoviecataloguesub4.mydbadapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,10 @@ import java.util.ArrayList;
 public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmViewHolder> {
     public static final String TAG = MoviesmAdapter.class.getSimpleName();
     private Activity mActivity;
-    private ArrayList<Moviesm> moviesmList;
+    private ArrayList<Moviesm> moviesmList = new ArrayList<>();
 
-    public MoviesmAdapter(Activity mActivity, ArrayList<Moviesm> moviesmList) {
+    public MoviesmAdapter(Activity mActivity) {
         this.mActivity = mActivity;
-        this.moviesmList = moviesmList;
     }
 
     public ArrayList<Moviesm> getmoviesmList() {
@@ -48,28 +48,44 @@ public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmV
         notifyDataSetChanged();
     }
 
+    //click custome
+    private OnItemClickCallback onItemClickCallback;
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback){
+        this.onItemClickCallback = onItemClickCallback;
+    }
+
+    public interface OnItemClickCallback {
+        void onItemClicked(Moviesm moviesm);
+    }
 
     @NonNull
     @Override
     public MoviesmAdapter.MoviesmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_list_movie, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_favorite, parent, false);
         return new MoviesmViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MoviesmAdapter.MoviesmViewHolder holder, int position) {
-        holder.bind(moviesmList.get(position));
-        holder.cardViewDesc.setOnClickListener(new CustomeOnItemClickListener(position, new CustomeOnItemClickListener.OnItemClickCallback() {
+    public void onBindViewHolder(@NonNull final MoviesmAdapter.MoviesmViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClicked(View view, int position) {
-                Toast.makeText(mActivity, "KLIK", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mActivity, DetailsMovieActivity.class);
-                intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
-                intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getmoviesmList().get(position));
-//                activity.startActivity(intent);
-                mActivity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
+            public void onClick(View v) {
+                onItemClickCallback.onItemClicked(moviesmList.get(holder.getAdapterPosition()));
             }
-        }));
+        });
+        holder.bind(moviesmList.get(position));
+//        holder.cardViewDesc.setOnClickListener(new CustomeOnItemClickListener(position, new CustomeOnItemClickListener.OnItemClickCallback() {
+//            @Override
+//            public void onItemClicked(View view, int position) {
+//                Toast.makeText(mActivity, "KLIK", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(mActivity, DetailsMovieActivity.class);
+//                intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
+//                intent.putExtra(DetailsMovieActivity.EXTRA_POSITION, position);
+//                intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getmoviesmList().get(position));
+////                activity.startActivity(intent);
+//                mActivity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
+//            }
+//        }));
     }
 
     @Override
@@ -131,8 +147,14 @@ public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmV
     }
 
     public void removeItem(int position) {
+        Log.d(TAG, "removeItem position : "+position);
         this.moviesmList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, moviesmList.size());
+    }
+
+    public void reloadItem() {
+        notifyDataSetChanged();
+//        notifyItemRangeChanged(position, moviesmList.size());
     }
 }

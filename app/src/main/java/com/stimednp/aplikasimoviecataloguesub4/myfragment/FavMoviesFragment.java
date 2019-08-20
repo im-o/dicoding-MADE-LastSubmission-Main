@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,16 +33,15 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoadMoviesmCallback {
+public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoadMoviesmCallback, MoviesmAdapter.OnItemClickCallback {
+    public static final String TAG = FavMoviesFragment.class.getSimpleName();
     private MoviesmAdapter moviesmAdapter;
     private RecyclerView rvMoviesm;
     private static final String EXTRA_STATE = "EXTRA_STATE";
 
     private MovieHelper movieHelper;
-    ArrayList<Moviesm> moviesmList;
+    private ArrayList<Moviesm> moviesmList;
 
-
-    private static final String TAG = NavMoviesFragment.class.getSimpleName();
     private SwipeRefreshLayout refreshLayoutMovie;
     private ProgressBar progressBarMovie;
     private TextView textViewEmpty;
@@ -65,14 +63,13 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         textViewEmpty = view.findViewById(R.id.tv_movies_empty);
         progressBarMovie = view.findViewById(R.id.progressbar_tab_movies_room);
         refreshLayoutMovie = view.findViewById(R.id.swipe_scroll_movie_room);
-
         rvMoviesm.setLayoutManager(new LinearLayoutManager(getContext()));
         rvMoviesm.setHasFixedSize(true);
-
         movieHelper = new MovieHelper(this.getActivity());
-        movieHelper.open();
 
-        refreshLayoutMovie.setOnRefreshListener(this);
+        movieHelper.open();
+        moviesmList = movieHelper.getAllMovies();
+        moviesmAdapter = new MoviesmAdapter(this.getActivity());
 
         if (savedInstanceState == null) {
             new LoadMoviesmAsync(movieHelper, this).execute();
@@ -83,44 +80,27 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
             }
         }
 
-        callDataViewModel();
+
+        rvMoviesm.setAdapter(moviesmAdapter);
+        moviesmAdapter.setOnItemClickCallback(this);
+        refreshLayoutMovie.setOnRefreshListener(this);
+        //check
+        checkingMovieList();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(EXTRA_STATE, moviesmAdapter.getmoviesmList());
-        Toast.makeText(getActivity(), "SAVE" + outState, Toast.LENGTH_SHORT).show();
     }
 
-    private void callDataViewModel() {
-        moviesmList = movieHelper.getAllMovies();
-        moviesmAdapter = new MoviesmAdapter(this.getActivity(), moviesmList);
-//        moviesmAdapter.setListMoviesm(moviesmList);
-        rvMoviesm.setAdapter(moviesmAdapter);
+    private void checkingMovieList() {
         if (moviesmList.size() < 1) {
             textViewEmpty.setVisibility(View.VISIBLE);
         } else {
             textViewEmpty.setVisibility(View.GONE);
         }
         progressBarMovie.setVisibility(View.GONE);
-
-
-//        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-//        moviesViewModel.getMoviesList().observe(this, new Observer<List<Movies>>() {
-//            @Override
-//            public void onChanged(List<Movies> movies) {
-//                moviesAdapter = new MoviesAdapter(getContext(), (ArrayList<Movies>) movies);
-//                moviesAdapter.setMoviesList((ArrayList<Movies>) movies);
-//                recyclerViewMovie.setAdapter(moviesAdapter);
-//                if (movies.size() < 1) {
-//                    textViewEmpty.setVisibility(View.VISIBLE);
-//                } else {
-//                    textViewEmpty.setVisibility(View.GONE);
-//                }
-//                progressBarMovie.setVisibility(View.GONE);
-//            }
-//        });
     }
 
     @Override
@@ -129,7 +109,7 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
             @Override
             public void run() {
                 if (refreshLayoutMovie.isRefreshing()) {
-//                    callDataViewModel();
+                    checkingMovieList();
                     refreshLayoutMovie.setRefreshing(false);
                 }
             }
@@ -150,6 +130,14 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     public void postExecute(ArrayList<Moviesm> moviesmList) {
         refreshLayoutMovie.setRefreshing(false);
         moviesmAdapter.setListMoviesm(moviesmList);
+    }
+
+    @Override
+    public void onItemClicked(Moviesm moviesm) {
+        Intent intent = new Intent(getActivity(), DetailsMovieActivity.class);
+        intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
+        intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, moviesm);
+        startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
     }
 
     private static class LoadMoviesmAsync extends AsyncTask<Void, Void, ArrayList<Moviesm>> {
@@ -182,52 +170,29 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getActivity(), "WORK FAV", Toast.LENGTH_SHORT).show();
-//        if (data != null) {
-//            if (requestCode == DetailsMovieActivity.REQUEST_ADD) {
-//                if (resultCode == DetailsMovieActivity.RESULT_ADD) {
-//                    Moviesm moviesm = data.getParcelableExtra(DetailsMovieActivity.EXTRA_MOVIE);
-//                    moviesmAdapter.addItem(moviesm);
-//                    rvMoviesm.smoothScrollToPosition(moviesmAdapter.getItemCount() - 1);
-//                    Toast.makeText(getContext(), "Satu item berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-////                    showSnackbarMessage("Satu item berhasil ditambahkan");
-//                }
-//            }
-//
-//        }
+        if (data != null) {
+            if (requestCode == DetailsMovieActivity.REQUEST_ADD) {
+                if (resultCode == DetailsMovieActivity.RESULT_ADD) {
+                    Moviesm moviesm = data.getParcelableExtra(DetailsMovieActivity.EXTRA_MOVIE);
+                    moviesmAdapter.addItem(moviesm);
+                    rvMoviesm.smoothScrollToPosition(moviesmAdapter.getItemCount() - 1);
+                    rvMoviesm.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
+                }
+                if (resultCode == DetailsMovieActivity.RESULT_DELETE) {
+                    moviesmAdapter.removeItem(0);
+                    rvMoviesm.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
+                    if (moviesmAdapter.getItemCount() == 0) {
+                        textViewEmpty.setVisibility(View.VISIBLE);
+                    }
+                }
+                new LoadMoviesmAsync(movieHelper, this).execute();
+            }
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: HANCUUURRRR");
         movieHelper.close();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        new LoadMoviesmAsync(movieHelper, this).execute();
-        rvMoviesm.setAdapter(moviesmAdapter);
-        Log.d(TAG, "onResume: "+movieHelper);
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
     }
 }

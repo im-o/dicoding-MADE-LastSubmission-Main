@@ -30,6 +30,8 @@ import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
 import com.stimednp.aplikasimoviecataloguesub4.mydb.MovieHelper;
 import com.stimednp.aplikasimoviecataloguesub4.mydbadapter.MoviesmAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
+import com.stimednp.aplikasimoviecataloguesub4.myfragment.FavMoviesFragment;
+import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavMoviesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.TvShowItems;
 import com.stimednp.aplikasimoviecataloguesub4.roomdb.TvShowRoomDatabase;
@@ -97,7 +99,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         movieHelper = MovieHelper.getInstance(getApplicationContext());
         movieHelper.open();
 
-        if (whereFrom.equals(MoviesmAdapter.TAG)){
+        if (whereFrom.equals(MoviesmAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))){
             moviesm = getIntent().getParcelableExtra(EXTRA_MOVIE);
             if (moviesm != null){
                 position = getIntent().getIntExtra(EXTRA_POSITION, 0);
@@ -162,7 +164,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 Glide.with(getApplicationContext()).load(pathImg + tvShowUrlPhoto).into(imgViewFromUrl);
                 Glide.with(getApplicationContext()).load(pathImg + tvShowUrlBg).into(imgViewBg);
             }
-        } else if (whereFrom.equals(MoviesmAdapter.TAG)) { //for details MoviesAdapter from dbroom
+        } else if (whereFrom.equals(MoviesmAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))) { //for details MoviesAdapter from dbroom
             Moviesm moviesm = getIntent().getParcelableExtra(EXTRA_MOVIE);
             if (moviesm != null) {
                 moviesId = moviesm.getId();
@@ -403,7 +405,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             tesPref(isFavorite);
             checkingFavorite();
             //delete
-            if ((whereFrom.equals(MovieItemsAdapter.TAG) || (whereFrom.equals(MoviesmAdapter.TAG)))) {
+            if ((whereFrom.equals(FavMoviesFragment.TAG) || (whereFrom.equals(MoviesmAdapter.TAG))  || (whereFrom.equals(MovieItemsAdapter.TAG)))) {
                 deleteMoviesByTitle(); //deleteMovies
             } else if ((whereFrom.equals(TvShowItemsAdapter.TAG)) || (whereFrom.equals(TvShowAdapter.TAG))) {
                 deleteTvShowByTitle(); //deleteTvShow
@@ -414,7 +416,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             tesPref(isFavorite);
             checkingFavorite();
             //insert
-            if ((whereFrom.equals(MovieItemsAdapter.TAG) || (whereFrom.equals(MoviesmAdapter.TAG)))) {
+            if ((whereFrom.equals(FavMoviesFragment.TAG) || (whereFrom.equals(MoviesmAdapter.TAG)) || (whereFrom.equals(MovieItemsAdapter.TAG)))) {
 //                insertFavorite();
                 setMovies(); //insertMovies
             } else if ((whereFrom.equals(TvShowItemsAdapter.TAG)) || (whereFrom.equals(TvShowAdapter.TAG))) {

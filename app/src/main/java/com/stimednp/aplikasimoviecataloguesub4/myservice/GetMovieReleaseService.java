@@ -91,7 +91,7 @@ public class GetMovieReleaseService extends JobService {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
-                .setSmallIcon(R.drawable.ic_movie_filter_black_24dp)
+                .setSmallIcon(R.drawable.ic_primary_green_moviedb)
                 .setContentText(message)
                 .setColor(ContextCompat.getColor(context, android.R.color.black))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})

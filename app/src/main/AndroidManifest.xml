@@ -13,9 +13,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_movie_filter_black_24dp"
+        android:icon="@drawable/ic_primary_green_moviedb"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_favorite_black_24dp"
+        android:roundIcon="@drawable/ic_primary_green_moviedb"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".myalarm.ReminderActivity"></activity>

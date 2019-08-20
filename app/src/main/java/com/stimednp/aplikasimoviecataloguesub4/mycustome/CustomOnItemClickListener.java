@@ -1,15 +1,15 @@
-package com.stimednp.aplikasimoviecataloguesub4.addingmethod;
+package com.stimednp.aplikasimoviecataloguesub4.mycustome;
 
 import android.view.View;
 
 /**
- * Created by rivaldy on 8/3/2019.
+ * Created by rivaldy on 8/20/2019.
  */
 
-public class CustomeOnItemClickListener implements View.OnClickListener {
+public class CustomOnItemClickListener implements View.OnClickListener {
     private int position;
     private OnItemClickCallback onItemClickCallback;
-    public CustomeOnItemClickListener(int position, OnItemClickCallback onItemClickCallback) {
+    public CustomOnItemClickListener(int position, OnItemClickCallback onItemClickCallback) {
         this.position = position;
         this.onItemClickCallback = onItemClickCallback;
     }
