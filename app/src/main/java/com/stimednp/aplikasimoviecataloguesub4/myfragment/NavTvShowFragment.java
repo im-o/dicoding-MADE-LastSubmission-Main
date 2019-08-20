@@ -77,6 +77,7 @@ public class NavTvShowFragment extends Fragment implements SwipeRefreshLayout.On
         //callmethod
         getAllMyString();
         checkingNetwork();
+        refreshLayoutMovie.setRefreshing(true);
     }
 
     private void getAllMyString() {
@@ -104,7 +105,7 @@ public class NavTvShowFragment extends Fragment implements SwipeRefreshLayout.On
     };
 
     private void checkingNetwork() {
-        refreshLayoutMovie.setRefreshing(true);
+//        refreshLayoutMovie.setRefreshing(true);
         if (getContext() != null) {
             if (CheckNetwork.isInternetAvailable(getContext())) {
                 int status = CheckNetwork.statusInternet;

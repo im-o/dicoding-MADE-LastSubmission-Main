@@ -2,6 +2,7 @@ package com.stimednp.aplikasimoviecataloguesub4.myfragment;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -112,5 +113,11 @@ public class NavFavoritesFragment extends Fragment{
         if (item != null){
             item.setVisible(false);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("NAV FAVOR", "onResume: ");
     }
 }

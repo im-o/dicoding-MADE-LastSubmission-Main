@@ -1,4 +1,5 @@
 <resources>
+    <item name="item_id_clicks" type="id"/>
     <string name="app_name">BoxOFFICE LASTSUB</string>
     <string name="name_tab1_movies">Movies</string>
     <string name="name_tab2_tvshow">TV Show</string>

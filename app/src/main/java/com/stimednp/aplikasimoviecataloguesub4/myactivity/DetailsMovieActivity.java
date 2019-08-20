@@ -2,14 +2,17 @@ package com.stimednp.aplikasimoviecataloguesub4.myactivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,18 +27,23 @@ import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.adapter.MovieItemsAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.adapter.TvShowItemsAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
+import com.stimednp.aplikasimoviecataloguesub4.mydb.MovieHelper;
+import com.stimednp.aplikasimoviecataloguesub4.mydbadapter.MoviesmAdapter;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.TvShowItems;
-import com.stimednp.aplikasimoviecataloguesub4.roomdb.MoviesRoomDatabase;
 import com.stimednp.aplikasimoviecataloguesub4.roomdb.TvShowRoomDatabase;
-import com.stimednp.aplikasimoviecataloguesub4.roommovies.Movies;
-import com.stimednp.aplikasimoviecataloguesub4.roommovies.MoviesAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.roomtvshow.TvShow;
 import com.stimednp.aplikasimoviecataloguesub4.roomtvshow.TvShowAdapter;
 
 public class DetailsMovieActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String EXTRA_MOVIE = "extra_movie";
     public static final String EXTRA_WHERE_FROM = "extra_where_from";
+    public static final int REQUEST_ADD = 100;
+    public static final int RESULT_DELETE = 301;
+    public static final int RESULT_ADD = 101;
+    public static final String EXTRA_POSITION = "extra_position";
+
     private Toolbar toolbarDetails;
     private TextView tvMovieTitle, tvMovieDesc, tvMovieRelease, tvMovieRating, tvMovieVoteCount;
     private ImageView imgViewFromUrl, imgViewBg;
@@ -49,13 +57,20 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
     private String strMsgSuccessDelete;
 
     private String movieTitle, movieDesc, movieRelease, movieRating, movieVoteCount, movieUrlPhoto, movieUrlBg;
+    private int moviesId;
     private String tvShowTitle, tvShowDesc, tvShowRelease, tvShowRating, tvShowVoteCount, tvShowUrlPhoto, tvShowUrlBg;
+
+    private Moviesm moviesm;
+    private int position;
+    private MovieHelper movieHelper;
+    private boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_movie);
         //inisial
+
         containerCoord = findViewById(R.id.container_coordinator_detail);
         toolbarDetails = findViewById(R.id.toolbar_detail);
         CollapsingToolbarLayout collapse = findViewById(R.id.collapse_toolbar_detail);
@@ -77,9 +92,24 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         setActionBarToolbar();
         getDataParceable();
         checkingFavorite();
+
+        String whereFrom = getIntent().getStringExtra(EXTRA_WHERE_FROM);
+        movieHelper = MovieHelper.getInstance(getApplicationContext());
+        movieHelper.open();
+
+        if (whereFrom.equals(MoviesmAdapter.TAG)){
+            moviesm = getIntent().getParcelableExtra(EXTRA_MOVIE);
+            if (moviesm != null){
+                position = getIntent().getIntExtra(EXTRA_POSITION, 0);
+                isEdit = true;
+            } else {
+                moviesm = new Moviesm();
+            }
+        }
+
     }
 
-    private void getDataParceable() {
+    private void getDataParceable() { //this is get DATA when click
         String whereFrom = getIntent().getStringExtra(EXTRA_WHERE_FROM);
         String pathImg = "https://image.tmdb.org/t/p/w500";
         cardViewDetails.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_scale_animation));
@@ -132,17 +162,18 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 Glide.with(getApplicationContext()).load(pathImg + tvShowUrlPhoto).into(imgViewFromUrl);
                 Glide.with(getApplicationContext()).load(pathImg + tvShowUrlBg).into(imgViewBg);
             }
-        } else if (whereFrom.equals(MoviesAdapter.TAG)) { //for details MoviesAdapter from dbroom
-            Movies movies = getIntent().getParcelableExtra(EXTRA_MOVIE);
-            if (movies != null) {
-                movieTitle = movies.getTitle();
+        } else if (whereFrom.equals(MoviesmAdapter.TAG)) { //for details MoviesAdapter from dbroom
+            Moviesm moviesm = getIntent().getParcelableExtra(EXTRA_MOVIE);
+            if (moviesm != null) {
+                moviesId = moviesm.getId();
+                movieTitle = moviesm.getTitle();
                 keyFavorite = movieTitle; //key
-                movieDesc = movies.getOverview();
-                movieRelease = movies.getRelease_date();
-                movieRating = movies.getVote_average().toString();
-                movieVoteCount = movies.getVote_count();
-                movieUrlPhoto = movies.getPoster_path();
-                movieUrlBg = movies.getBackdrop_path();
+                movieDesc = moviesm.getOverview();
+                movieRelease = moviesm.getRelease_date();
+                movieRating = moviesm.getVote_average().toString();
+                movieVoteCount = moviesm.getVote_count();
+                movieUrlPhoto = moviesm.getPoster_path();
+                movieUrlBg = moviesm.getBackdrop_path();
 
                 AllOtherMethod allOtherMethod = new AllOtherMethod();
                 String movieDate = allOtherMethod.changeFormatDate(movieRelease);
@@ -155,6 +186,19 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 tvMovieVoteCount.setText(movieVoteCount);
                 Glide.with(getApplicationContext()).load(pathImg + movieUrlPhoto).into(imgViewFromUrl);
                 Glide.with(getApplicationContext()).load(pathImg + movieUrlBg).into(imgViewBg);
+
+//                Intent intent = new Intent();
+//                intent.putExtra(EXTRA_MOVIE, moviesm);
+//                intent.putExtra(EXTRA_POSITION, position);
+//
+//                if (isEdit){
+//                    long result = movieHelper.getAllMovies().size();
+//                    if (result > 0){
+//                        setResult(RESULT_ADD, intent);
+//                    } else {
+//                        Toast.makeText(this, "GAGAL", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
             }
         } else if (whereFrom.equals(TvShowAdapter.TAG)) { //for details TvShowAdapter from roomdb
             TvShow tvShow = getIntent().getParcelableExtra(EXTRA_MOVIE);
@@ -194,24 +238,52 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
+
+
+    private void insertFavorite() {
+        moviesm.setTitle(movieTitle);
+        moviesm.setOverview(movieDesc);
+        moviesm.setRelease_date(movieRelease);
+        moviesm.setVote_average(Double.parseDouble(movieRating));
+        moviesm.setVote_count(movieVoteCount);
+        moviesm.setPoster_path(movieUrlPhoto);
+        moviesm.setBackdrop_path(movieUrlBg);
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_MOVIE, moviesm);
+        intent.putExtra(EXTRA_POSITION, position);
+        Log.d("INI", "insertFavorite: " + moviesm);
+        int result = (int) movieHelper.insertMovie(moviesm);
+        if (result > 0) {
+            moviesm.setId(result);
+            setResult(RESULT_ADD, intent);
+        }
+    }
+
     //Room
     private void setMovies() {
         @SuppressLint("StaticFieldLeak")
         class SetMovies extends AsyncTask<Void, Void, Void> {
             @Override
             protected Void doInBackground(Void... voids) {
-                Movies movies = new Movies();
-                movies.setTitle(movieTitle);
-                movies.setOverview(movieDesc);
-                movies.setRelease_date(movieRelease);
-                movies.setVote_average(Double.parseDouble(movieRating));
-                movies.setVote_count(movieVoteCount);
-                movies.setPoster_path(movieUrlPhoto);
-                movies.setBackdrop_path(movieUrlBg);
-                movies.setFavorite(true);
+                Moviesm moviesm = new Moviesm();
+                moviesm.setTitle(movieTitle);
+                moviesm.setOverview(movieDesc);
+                moviesm.setRelease_date(movieRelease);
+                moviesm.setVote_average(Double.parseDouble(movieRating));
+                moviesm.setVote_count(movieVoteCount);
+                moviesm.setPoster_path(movieUrlPhoto);
+                moviesm.setBackdrop_path(movieUrlBg);
 
-                //adding to db
-                MoviesRoomDatabase.getDatabase(getApplicationContext()).moviesDao().insert(movies);
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_MOVIE, moviesm);
+                intent.putExtra(EXTRA_POSITION, position);
+
+                long result = movieHelper.insertMovie(moviesm);
+                if (result > 0) {
+                    moviesm.setId((int) result);
+                    setResult(RESULT_ADD, intent);
+                }
                 return null;
             }
 
@@ -231,7 +303,16 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         class DeleteMovies extends AsyncTask<Void, Void, Void> {
             @Override
             protected Void doInBackground(Void... voids) {
-                MoviesRoomDatabase.getDatabase(getApplicationContext()).moviesDao().deleteByTitle(movieTitle);
+                long result = movieHelper.deleteMovieByTitle(movieTitle);
+                Log.d("INIII", "deleteMoviesByTitle: "+result+" :: "+movieTitle+" :: "+position);
+                if (result > 0) {
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_POSITION, position);
+                    setResult(RESULT_DELETE, intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Gagal Hapus", Toast.LENGTH_SHORT).show();
+                }
+//                MoviesRoomDatabase.getDatabase(getApplicationContext()).moviesDao().deleteByTitle(movieTitle);
                 return null;
             }
 
@@ -322,7 +403,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             tesPref(isFavorite);
             checkingFavorite();
             //delete
-            if ((whereFrom.equals(MovieItemsAdapter.TAG) || (whereFrom.equals(MoviesAdapter.TAG)))) {
+            if ((whereFrom.equals(MovieItemsAdapter.TAG) || (whereFrom.equals(MoviesmAdapter.TAG)))) {
                 deleteMoviesByTitle(); //deleteMovies
             } else if ((whereFrom.equals(TvShowItemsAdapter.TAG)) || (whereFrom.equals(TvShowAdapter.TAG))) {
                 deleteTvShowByTitle(); //deleteTvShow
@@ -333,7 +414,8 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             tesPref(isFavorite);
             checkingFavorite();
             //insert
-            if ((whereFrom.equals(MovieItemsAdapter.TAG) || (whereFrom.equals(MoviesAdapter.TAG)))) {
+            if ((whereFrom.equals(MovieItemsAdapter.TAG) || (whereFrom.equals(MoviesmAdapter.TAG)))) {
+//                insertFavorite();
                 setMovies(); //insertMovies
             } else if ((whereFrom.equals(TvShowItemsAdapter.TAG)) || (whereFrom.equals(TvShowAdapter.TAG))) {
                 setTvShows(); //insertTvShow

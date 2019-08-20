@@ -1,6 +1,8 @@
 package com.stimednp.aplikasimoviecataloguesub4.myfragment;
 
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,9 +33,14 @@ import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.adapter.MovieItemsAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllMyStrings;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.CheckNetwork;
+import com.stimednp.aplikasimoviecataloguesub4.mydb.LoadMoviesmCallback;
+import com.stimednp.aplikasimoviecataloguesub4.mydb.MovieHelper;
+import com.stimednp.aplikasimoviecataloguesub4.mydbadapter.MoviesmAdapter;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MainViewModel;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -70,14 +78,14 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         if (getActivity() != null) {
             mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
             mainViewModel.getListMovies().observe(getActivity(), getMovie);
-            movieItemsAdapter = new MovieItemsAdapter(getContext());
+            movieItemsAdapter = new MovieItemsAdapter(getActivity());
         }
         refreshLayoutMovie.setOnRefreshListener(this);
 
         //callmethod
         getAllMyString();
         checkingNetwork();
-        setHasOptionsMenu(true);
+        refreshLayoutMovie.setRefreshing(true);
     }
 
     private void getAllMyString() {
@@ -105,7 +113,7 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     };
 
     private void checkingNetwork() {
-        refreshLayoutMovie.setRefreshing(true);
+//        refreshLayoutMovie.setRefreshing(true);
         if (getContext() != null) {
             if (CheckNetwork.isInternetAvailable(getContext())) {
                 int status = CheckNetwork.statusInternet;
@@ -187,5 +195,11 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
             recyclerViewMovie.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerViewMovie.setAdapter(movieItemsAdapter);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getActivity(), "NAV", Toast.LENGTH_SHORT).show();
     }
 }

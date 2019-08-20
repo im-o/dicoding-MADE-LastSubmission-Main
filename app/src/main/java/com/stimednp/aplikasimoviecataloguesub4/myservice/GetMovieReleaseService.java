@@ -11,7 +11,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -19,23 +18,11 @@ import androidx.core.content.ContextCompat;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.stimednp.aplikasimoviecataloguesub4.R;
-import com.stimednp.aplikasimoviecataloguesub4.myapi.APIMovieTv;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MainViewModel;
-import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
-import com.stimednp.aplikasimoviecataloguesub4.mymodel.MoviesResponse;
-import com.stimednp.aplikasimoviecataloguesub4.roommovies.Movies;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by rivaldy on 8/18/2019.

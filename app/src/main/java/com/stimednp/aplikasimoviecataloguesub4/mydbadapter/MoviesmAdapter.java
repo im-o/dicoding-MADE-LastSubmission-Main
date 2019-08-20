@@ -1,12 +1,10 @@
-package com.stimednp.aplikasimoviecataloguesub4.adapter;
+package com.stimednp.aplikasimoviecataloguesub4.mydbadapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,67 +18,76 @@ import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.CustomeOnItemClickListener;
 import com.stimednp.aplikasimoviecataloguesub4.myactivity.DetailsMovieActivity;
-import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
 
 import java.util.ArrayList;
 
 /**
- * Created by rivaldy on 8/4/2019.
+ * Created by rivaldy on 8/19/2019.
  */
 
-public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.MovieItemsViewHolder> {
-    public static final String TAG = MovieItemsAdapter.class.getSimpleName();
-    private ArrayList<MovieItems> moviesData = new ArrayList<>();
-//    private Context context;
-    private Activity activity;
+public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmViewHolder> {
+    public static final String TAG = MoviesmAdapter.class.getSimpleName();
+    private Activity mActivity;
+    private ArrayList<Moviesm> moviesmList;
 
-    public MovieItemsAdapter(Activity activity) {
-        this.activity = activity;
+    public MoviesmAdapter(Activity mActivity, ArrayList<Moviesm> moviesmList) {
+        this.mActivity = mActivity;
+        this.moviesmList = moviesmList;
     }
 
-    public void setMoviesData(ArrayList<MovieItems> list) {
-        moviesData.clear();
-        moviesData.addAll(list);
+    public ArrayList<Moviesm> getmoviesmList() {
+        return moviesmList;
+    }
+
+    public void setListMoviesm(ArrayList<Moviesm> listMoviesm) {
+        if (listMoviesm.size() > 0) {
+            this.moviesmList.clear();
+        }
+        this.moviesmList.addAll(listMoviesm);
         notifyDataSetChanged();
     }
 
-    private ArrayList<MovieItems> getMoviesData() {
-        return moviesData;
-    }
 
     @NonNull
     @Override
-    public MovieItemsAdapter.MovieItemsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MoviesmAdapter.MoviesmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_list_movie, parent, false);
-        return new MovieItemsViewHolder(view);
+        return new MoviesmViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieItemsAdapter.MovieItemsViewHolder holder, int position) {
-        holder.bind(getMoviesData().get(position));
+    public void onBindViewHolder(@NonNull MoviesmAdapter.MoviesmViewHolder holder, int position) {
+        holder.bind(moviesmList.get(position));
         holder.cardViewDesc.setOnClickListener(new CustomeOnItemClickListener(position, new CustomeOnItemClickListener.OnItemClickCallback() {
             @Override
             public void onItemClicked(View view, int position) {
-                Intent intent = new Intent(activity, DetailsMovieActivity.class);
+                Toast.makeText(mActivity, "KLIK", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mActivity, DetailsMovieActivity.class);
                 intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
-                intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getMoviesData().get(position));
-//                context.startActivity(intent);
-                activity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
+                intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getmoviesmList().get(position));
+//                activity.startActivity(intent);
+                mActivity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
             }
         }));
     }
 
     @Override
     public int getItemCount() {
-        return moviesData.size();
+        if (moviesmList == null) {
+            return 0;
+        } else {
+            return moviesmList.size();
+        }
     }
 
-    class MovieItemsViewHolder extends RecyclerView.ViewHolder {
+    class MoviesmViewHolder extends RecyclerView.ViewHolder {
         CardView cardViewImg, cardViewDesc, cardViewRating;
         TextView tvTitle, tvRelease, tvRating, tvDesc;
         ImageView imgvPoster;
+        RecyclerView recyclerView;
 
-        MovieItemsViewHolder(@NonNull View itemView) {
+        MoviesmViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_item_title);
             tvRelease = itemView.findViewById(R.id.tv_item_release);
@@ -90,9 +97,10 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             cardViewImg = itemView.findViewById(R.id.card_img);
             cardViewDesc = itemView.findViewById(R.id.card_view_desc);
             cardViewRating = itemView.findViewById(R.id.card_view_rating);
+            recyclerView = itemView.findViewById(R.id.rv_tab_movies_room);
         }
 
-        void bind(MovieItems movieItems){
+        void bind(Moviesm movieItems) {
             String pathImg = "https://image.tmdb.org/t/p/w300_and_h450_bestv2";
             String title = movieItems.getTitle();
             String release = movieItems.getRelease_date();
@@ -101,19 +109,30 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             String imgUrl = movieItems.getPoster_path();
 
             AllOtherMethod allOtherMethod = new AllOtherMethod();
-            if (release != null){
-                String myDate = allOtherMethod.changeFormatDate(release);
-                tvRelease.setText(myDate);
-            } else {
-                tvRelease.setText(release);
-            }
-
+            String myDate = allOtherMethod.changeFormatDate(release);
             tvTitle.setText(title);
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
-            Glide.with(activity)
+            tvRelease.setText(myDate);
+            Glide.with(mActivity)
                     .load(pathImg + imgUrl)
                     .into(imgvPoster);
         }
+    }
+
+    public void addItem(Moviesm moviesm) {
+        this.moviesmList.add(moviesm);
+        notifyItemInserted(moviesmList.size() - 1);
+    }
+
+    public void updateItem(int position, Moviesm moviesm) {
+        this.moviesmList.set(position, moviesm);
+        notifyItemChanged(position, moviesm);
+    }
+
+    public void removeItem(int position) {
+        this.moviesmList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, moviesmList.size());
     }
 }

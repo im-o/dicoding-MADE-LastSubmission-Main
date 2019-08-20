@@ -8,13 +8,10 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.bumptech.glide.Glide;
 import com.stimednp.aplikasimoviecataloguesub4.R;
-import com.stimednp.aplikasimoviecataloguesub4.roommovies.Movies;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by rivaldy on 8/17/2019.
