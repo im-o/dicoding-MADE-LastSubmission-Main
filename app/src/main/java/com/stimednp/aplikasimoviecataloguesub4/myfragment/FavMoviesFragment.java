@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.myactivity.DetailsMovieActivity;
-import com.stimednp.aplikasimoviecataloguesub4.mydb.LoadMoviesmCallback;
-import com.stimednp.aplikasimoviecataloguesub4.mydb.MovieHelper;
-import com.stimednp.aplikasimoviecataloguesub4.mydbadapter.MoviesmAdapter;
-import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
+import com.stimednp.aplikasimoviecataloguesub4.mydb.FavMoviesHelper;
+import com.stimednp.aplikasimoviecataloguesub4.mydb.LoadFavMoviesCallback;
+import com.stimednp.aplikasimoviecataloguesub4.mydbadapter.FavMoviesAdapter;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.FavMoviesModel;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -33,14 +34,14 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoadMoviesmCallback, MoviesmAdapter.OnItemClickCallback {
+public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoadFavMoviesCallback, FavMoviesAdapter.OnItemClickCallback {
     public static final String TAG = FavMoviesFragment.class.getSimpleName();
-    private MoviesmAdapter moviesmAdapter;
-    private RecyclerView rvMoviesm;
+    private FavMoviesAdapter favMoviesAdapter;
+    private RecyclerView recyclervFavMovies;
     private static final String EXTRA_STATE = "EXTRA_STATE";
 
-    private MovieHelper movieHelper;
-    private ArrayList<Moviesm> moviesmList;
+    private FavMoviesHelper favMoviesHelper;
+    private ArrayList<FavMoviesModel> favMoviesModelList;
 
     private SwipeRefreshLayout refreshLayoutMovie;
     private ProgressBar progressBarMovie;
@@ -59,30 +60,29 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvMoviesm = view.findViewById(R.id.rv_tab_movies_room);
+        recyclervFavMovies = view.findViewById(R.id.rv_tab_movies_room);
         textViewEmpty = view.findViewById(R.id.tv_movies_empty);
         progressBarMovie = view.findViewById(R.id.progressbar_tab_movies_room);
         refreshLayoutMovie = view.findViewById(R.id.swipe_scroll_movie_room);
-        rvMoviesm.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvMoviesm.setHasFixedSize(true);
-        movieHelper = new MovieHelper(this.getActivity());
+        recyclervFavMovies.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclervFavMovies.setHasFixedSize(true);
+        favMoviesHelper = new FavMoviesHelper(this.getActivity());
 
-        movieHelper.open();
-        moviesmList = movieHelper.getAllMovies();
-        moviesmAdapter = new MoviesmAdapter(this.getActivity());
+        favMoviesHelper.open();
+        favMoviesModelList = favMoviesHelper.getAllMovies();
+        favMoviesAdapter = new FavMoviesAdapter(this.getActivity());
+        recyclervFavMovies.setAdapter(favMoviesAdapter);
 
         if (savedInstanceState == null) {
-            new LoadMoviesmAsync(movieHelper, this).execute();
+            new LoadMoviesmAsync(favMoviesHelper, this).execute();
         } else {
-            ArrayList<Moviesm> moviesmList = savedInstanceState.getParcelableArrayList(EXTRA_STATE);
-            if (moviesmList != null) {
-                moviesmAdapter.setListMoviesm(moviesmList);
+            ArrayList<FavMoviesModel> favMoviesModelList = savedInstanceState.getParcelableArrayList(EXTRA_STATE);
+            if (favMoviesModelList != null) {
+                favMoviesAdapter.setListMoviesm(favMoviesModelList);
             }
         }
 
-
-        rvMoviesm.setAdapter(moviesmAdapter);
-        moviesmAdapter.setOnItemClickCallback(this);
+        favMoviesAdapter.setOnItemClickCallback(this);
         refreshLayoutMovie.setOnRefreshListener(this);
         //check
         checkingMovieList();
@@ -91,11 +91,12 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(EXTRA_STATE, moviesmAdapter.getmoviesmList());
+        outState.putParcelableArrayList(EXTRA_STATE, favMoviesAdapter.getmoviesmList());
     }
 
     private void checkingMovieList() {
-        if (moviesmList.size() < 1) {
+        recyclervFavMovies.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
+        if (favMoviesModelList.size() < 1) {
             textViewEmpty.setVisibility(View.VISIBLE);
         } else {
             textViewEmpty.setVisibility(View.GONE);
@@ -127,25 +128,25 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public void postExecute(ArrayList<Moviesm> moviesmList) {
+    public void postExecute(ArrayList<FavMoviesModel> favMoviesModelList) {
         refreshLayoutMovie.setRefreshing(false);
-        moviesmAdapter.setListMoviesm(moviesmList);
+        favMoviesAdapter.setListMoviesm(favMoviesModelList);
     }
 
     @Override
-    public void onItemClicked(Moviesm moviesm) {
+    public void onItemClicked(FavMoviesModel favMoviesModel) {
         Intent intent = new Intent(getActivity(), DetailsMovieActivity.class);
         intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
-        intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, moviesm);
+        intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, favMoviesModel);
         startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
     }
 
-    private static class LoadMoviesmAsync extends AsyncTask<Void, Void, ArrayList<Moviesm>> {
-        private final WeakReference<MovieHelper> weakMovieHelper;
-        private final WeakReference<LoadMoviesmCallback> weakCallback;
+    private static class LoadMoviesmAsync extends AsyncTask<Void, Void, ArrayList<FavMoviesModel>> {
+        private final WeakReference<FavMoviesHelper> weakMovieHelper;
+        private final WeakReference<LoadFavMoviesCallback> weakCallback;
 
-        LoadMoviesmAsync(MovieHelper movieHelper, LoadMoviesmCallback callback) {
-            weakMovieHelper = new WeakReference<>(movieHelper);
+        LoadMoviesmAsync(FavMoviesHelper favMoviesHelper, LoadFavMoviesCallback callback) {
+            weakMovieHelper = new WeakReference<>(favMoviesHelper);
             weakCallback = new WeakReference<>(callback);
         }
 
@@ -156,14 +157,14 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         }
 
         @Override
-        protected ArrayList<Moviesm> doInBackground(Void... voids) {
+        protected ArrayList<FavMoviesModel> doInBackground(Void... voids) {
             return weakMovieHelper.get().getAllMovies();
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Moviesm> moviesms) {
-            super.onPostExecute(moviesms);
-            weakCallback.get().postExecute(moviesms);
+        protected void onPostExecute(ArrayList<FavMoviesModel> favMoviesModels) {
+            super.onPostExecute(favMoviesModels);
+            weakCallback.get().postExecute(favMoviesModels);
         }
     }
 
@@ -173,19 +174,19 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         if (data != null) {
             if (requestCode == DetailsMovieActivity.REQUEST_ADD) {
                 if (resultCode == DetailsMovieActivity.RESULT_ADD) {
-                    Moviesm moviesm = data.getParcelableExtra(DetailsMovieActivity.EXTRA_MOVIE);
-                    moviesmAdapter.addItem(moviesm);
-                    rvMoviesm.smoothScrollToPosition(moviesmAdapter.getItemCount() - 1);
-                    rvMoviesm.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
+                    FavMoviesModel favMoviesModel = data.getParcelableExtra(DetailsMovieActivity.EXTRA_MOVIE);
+                    favMoviesAdapter.addItem(favMoviesModel);
+                    recyclervFavMovies.smoothScrollToPosition(favMoviesAdapter.getItemCount() - 1);
+                    recyclervFavMovies.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
                 }
                 if (resultCode == DetailsMovieActivity.RESULT_DELETE) {
-                    moviesmAdapter.removeItem(0);
-                    rvMoviesm.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
-                    if (moviesmAdapter.getItemCount() == 0) {
+                    favMoviesAdapter.removeItem(0);
+                    recyclervFavMovies.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_transition_animation));
+                    if (favMoviesAdapter.getItemCount() == 0) {
                         textViewEmpty.setVisibility(View.VISIBLE);
                     }
                 }
-                new LoadMoviesmAsync(movieHelper, this).execute();
+                new LoadMoviesmAsync(favMoviesHelper, this).execute();
             }
         }
     }
@@ -193,6 +194,6 @@ public class FavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onDestroy() {
         super.onDestroy();
-        movieHelper.close();
+        favMoviesHelper.close();
     }
 }

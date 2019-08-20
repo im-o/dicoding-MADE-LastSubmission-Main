@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by rivaldy on 8/19/2019.
  */
 
-public class Moviesm implements Parcelable {
+public class FavMoviesModel implements Parcelable {
     private int id;
     private String title;
     private String release_date;
@@ -99,10 +99,10 @@ public class Moviesm implements Parcelable {
         dest.writeString(this.backdrop_path);
     }
 
-    public Moviesm() {
+    public FavMoviesModel() {
     }
 
-    protected Moviesm(Parcel in) {
+    private FavMoviesModel(Parcel in) {
         this.id = in.readInt();
         this.title = in.readString();
         this.release_date = in.readString();
@@ -113,15 +113,15 @@ public class Moviesm implements Parcelable {
         this.backdrop_path = in.readString();
     }
 
-    public static final Creator<Moviesm> CREATOR = new Creator<Moviesm>() {
+    public static final Creator<FavMoviesModel> CREATOR = new Creator<FavMoviesModel>() {
         @Override
-        public Moviesm createFromParcel(Parcel source) {
-            return new Moviesm(source);
+        public FavMoviesModel createFromParcel(Parcel source) {
+            return new FavMoviesModel(source);
         }
 
         @Override
-        public Moviesm[] newArray(int size) {
-            return new Moviesm[size];
+        public FavMoviesModel[] newArray(int size) {
+            return new FavMoviesModel[size];
         }
     };
 }

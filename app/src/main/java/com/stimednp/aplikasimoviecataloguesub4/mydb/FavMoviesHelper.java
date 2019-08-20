@@ -7,7 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.FavMoviesModel;
 
 import java.util.ArrayList;
 
@@ -25,22 +25,22 @@ import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.TABL
  * Created by rivaldy on 8/19/2019.
  */
 
-public class MovieHelper {
+public class FavMoviesHelper {
     private static final String DATABASE_TABLE = TABLE_MOVIE;
     private static DatabaseHelper dataBaseHelper;
-    private static MovieHelper INSTANCE;
+    private static FavMoviesHelper INSTANCE;
 
     private static SQLiteDatabase database;
 
-    public MovieHelper(Context context) {
+    public FavMoviesHelper(Context context) {
         dataBaseHelper = new DatabaseHelper(context);
     }
 
-    public static MovieHelper getInstance(Context context) {
+    public static FavMoviesHelper getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (SQLiteOpenHelper.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new MovieHelper(context);
+                    INSTANCE = new FavMoviesHelper(context);
                 }
             }
         }
@@ -58,8 +58,8 @@ public class MovieHelper {
     }
 
     //CRUD
-    public ArrayList<Moviesm> getAllMovies() {
-        ArrayList<Moviesm> arrayList = new ArrayList<>();
+    public ArrayList<FavMoviesModel> getAllMovies() {
+        ArrayList<FavMoviesModel> arrayList = new ArrayList<>();
         Cursor cursor = database.query(DATABASE_TABLE, null,
                 null,
                 null,
@@ -68,20 +68,20 @@ public class MovieHelper {
                 _ID + " ASC",
                 null);
         cursor.moveToFirst();
-        Moviesm moviesm;
+        FavMoviesModel favMoviesModel;
         if (cursor.getCount() > 0) {
             do {
-                moviesm = new Moviesm();
-                moviesm.setId(cursor.getInt(cursor.getColumnIndexOrThrow(_ID)));
-                moviesm.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)));
-                moviesm.setRelease_date(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RELEASE_DATE)));
-                moviesm.setVote_average(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_VOTE_AVERAGE)));
-                moviesm.setVote_count(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_VOTE_COUNT)));
-                moviesm.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OVERVIEW)));
-                moviesm.setPoster_path(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POSTER_PATH)));
-                moviesm.setBackdrop_path(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BACK_PATH)));
+                favMoviesModel = new FavMoviesModel();
+                favMoviesModel.setId(cursor.getInt(cursor.getColumnIndexOrThrow(_ID)));
+                favMoviesModel.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)));
+                favMoviesModel.setRelease_date(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RELEASE_DATE)));
+                favMoviesModel.setVote_average(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_VOTE_AVERAGE)));
+                favMoviesModel.setVote_count(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_VOTE_COUNT)));
+                favMoviesModel.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_OVERVIEW)));
+                favMoviesModel.setPoster_path(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_POSTER_PATH)));
+                favMoviesModel.setBackdrop_path(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BACK_PATH)));
 
-                arrayList.add(moviesm);
+                arrayList.add(favMoviesModel);
                 cursor.moveToNext();
             } while (!cursor.isAfterLast());
         }
@@ -90,29 +90,29 @@ public class MovieHelper {
     }
 
     //save/insert data
-    public long insertMovie(Moviesm moviesm) {
+    public long insertMovie(FavMoviesModel favMoviesModel) {
         ContentValues args = new ContentValues();
-        args.put(COLUMN_TITLE, moviesm.getTitle());
-        args.put(COLUMN_RELEASE_DATE, moviesm.getRelease_date());
-        args.put(COLUMN_VOTE_AVERAGE, moviesm.getVote_average());
-        args.put(COLUMN_VOTE_COUNT, moviesm.getVote_count());
-        args.put(COLUMN_OVERVIEW, moviesm.getOverview());
-        args.put(COLUMN_POSTER_PATH, moviesm.getPoster_path());
-        args.put(COLUMN_BACK_PATH, moviesm.getBackdrop_path());
+        args.put(COLUMN_TITLE, favMoviesModel.getTitle());
+        args.put(COLUMN_RELEASE_DATE, favMoviesModel.getRelease_date());
+        args.put(COLUMN_VOTE_AVERAGE, favMoviesModel.getVote_average());
+        args.put(COLUMN_VOTE_COUNT, favMoviesModel.getVote_count());
+        args.put(COLUMN_OVERVIEW, favMoviesModel.getOverview());
+        args.put(COLUMN_POSTER_PATH, favMoviesModel.getPoster_path());
+        args.put(COLUMN_BACK_PATH, favMoviesModel.getBackdrop_path());
         return database.insert(DATABASE_TABLE, null, args);
     }
 
     //update
-    public int updateMovie(Moviesm moviesm) {
+    public int updateMovie(FavMoviesModel favMoviesModel) {
         ContentValues args = new ContentValues();
-        args.put(COLUMN_TITLE, moviesm.getTitle());
-        args.put(COLUMN_RELEASE_DATE, moviesm.getRelease_date());
-        args.put(COLUMN_VOTE_AVERAGE, moviesm.getVote_average());
-        args.put(COLUMN_VOTE_COUNT, moviesm.getVote_count());
-        args.put(COLUMN_OVERVIEW, moviesm.getOverview());
-        args.put(COLUMN_POSTER_PATH, moviesm.getPoster_path());
-        args.put(COLUMN_BACK_PATH, moviesm.getBackdrop_path());
-        return database.update(DATABASE_TABLE, args, _ID + "= '" + moviesm.getId() + "'", null);
+        args.put(COLUMN_TITLE, favMoviesModel.getTitle());
+        args.put(COLUMN_RELEASE_DATE, favMoviesModel.getRelease_date());
+        args.put(COLUMN_VOTE_AVERAGE, favMoviesModel.getVote_average());
+        args.put(COLUMN_VOTE_COUNT, favMoviesModel.getVote_count());
+        args.put(COLUMN_OVERVIEW, favMoviesModel.getOverview());
+        args.put(COLUMN_POSTER_PATH, favMoviesModel.getPoster_path());
+        args.put(COLUMN_BACK_PATH, favMoviesModel.getBackdrop_path());
+        return database.update(DATABASE_TABLE, args, _ID + "= '" + favMoviesModel.getId() + "'", null);
     }
 
     //delete

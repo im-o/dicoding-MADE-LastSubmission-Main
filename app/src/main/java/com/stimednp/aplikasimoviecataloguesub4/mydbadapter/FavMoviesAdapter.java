@@ -1,14 +1,12 @@
 package com.stimednp.aplikasimoviecataloguesub4.mydbadapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -17,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
-import com.stimednp.aplikasimoviecataloguesub4.addingmethod.CustomeOnItemClickListener;
-import com.stimednp.aplikasimoviecataloguesub4.myactivity.DetailsMovieActivity;
-import com.stimednp.aplikasimoviecataloguesub4.mydbentity.Moviesm;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.FavMoviesModel;
 
 import java.util.ArrayList;
 
@@ -27,24 +23,24 @@ import java.util.ArrayList;
  * Created by rivaldy on 8/19/2019.
  */
 
-public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmViewHolder> {
-    public static final String TAG = MoviesmAdapter.class.getSimpleName();
+public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.MoviesmViewHolder> {
+    public static final String TAG = FavMoviesAdapter.class.getSimpleName();
     private Activity mActivity;
-    private ArrayList<Moviesm> moviesmList = new ArrayList<>();
+    private ArrayList<FavMoviesModel> favMoviesModelList = new ArrayList<>();
 
-    public MoviesmAdapter(Activity mActivity) {
+    public FavMoviesAdapter(Activity mActivity) {
         this.mActivity = mActivity;
     }
 
-    public ArrayList<Moviesm> getmoviesmList() {
-        return moviesmList;
+    public ArrayList<FavMoviesModel> getmoviesmList() {
+        return favMoviesModelList;
     }
 
-    public void setListMoviesm(ArrayList<Moviesm> listMoviesm) {
-        if (listMoviesm.size() > 0) {
-            this.moviesmList.clear();
+    public void setListMoviesm(ArrayList<FavMoviesModel> listFavMoviesModel) {
+        if (listFavMoviesModel.size() > 0) {
+            this.favMoviesModelList.clear();
         }
-        this.moviesmList.addAll(listMoviesm);
+        this.favMoviesModelList.addAll(listFavMoviesModel);
         notifyDataSetChanged();
     }
 
@@ -55,25 +51,25 @@ public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmV
     }
 
     public interface OnItemClickCallback {
-        void onItemClicked(Moviesm moviesm);
+        void onItemClicked(FavMoviesModel favMoviesModel);
     }
 
     @NonNull
     @Override
-    public MoviesmAdapter.MoviesmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavMoviesAdapter.MoviesmViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_favorite, parent, false);
         return new MoviesmViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MoviesmAdapter.MoviesmViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final FavMoviesAdapter.MoviesmViewHolder holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickCallback.onItemClicked(moviesmList.get(holder.getAdapterPosition()));
+                onItemClickCallback.onItemClicked(favMoviesModelList.get(holder.getAdapterPosition()));
             }
         });
-        holder.bind(moviesmList.get(position));
+        holder.bind(favMoviesModelList.get(position));
 //        holder.cardViewDesc.setOnClickListener(new CustomeOnItemClickListener(position, new CustomeOnItemClickListener.OnItemClickCallback() {
 //            @Override
 //            public void onItemClicked(View view, int position) {
@@ -90,10 +86,10 @@ public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmV
 
     @Override
     public int getItemCount() {
-        if (moviesmList == null) {
+        if (favMoviesModelList == null) {
             return 0;
         } else {
-            return moviesmList.size();
+            return favMoviesModelList.size();
         }
     }
 
@@ -116,7 +112,7 @@ public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmV
             recyclerView = itemView.findViewById(R.id.rv_tab_movies_room);
         }
 
-        void bind(Moviesm movieItems) {
+        void bind(FavMoviesModel movieItems) {
             String pathImg = "https://image.tmdb.org/t/p/w300_and_h450_bestv2";
             String title = movieItems.getTitle();
             String release = movieItems.getRelease_date();
@@ -136,25 +132,25 @@ public class MoviesmAdapter extends RecyclerView.Adapter<MoviesmAdapter.MoviesmV
         }
     }
 
-    public void addItem(Moviesm moviesm) {
-        this.moviesmList.add(moviesm);
-        notifyItemInserted(moviesmList.size() - 1);
+    public void addItem(FavMoviesModel favMoviesModel) {
+        this.favMoviesModelList.add(favMoviesModel);
+        notifyItemInserted(favMoviesModelList.size() - 1);
     }
 
-    public void updateItem(int position, Moviesm moviesm) {
-        this.moviesmList.set(position, moviesm);
-        notifyItemChanged(position, moviesm);
+    public void updateItem(int position, FavMoviesModel favMoviesModel) {
+        this.favMoviesModelList.set(position, favMoviesModel);
+        notifyItemChanged(position, favMoviesModel);
     }
 
     public void removeItem(int position) {
         Log.d(TAG, "removeItem position : "+position);
-        this.moviesmList.remove(position);
+        this.favMoviesModelList.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, moviesmList.size());
+        notifyItemRangeChanged(position, favMoviesModelList.size());
     }
 
     public void reloadItem() {
         notifyDataSetChanged();
-//        notifyItemRangeChanged(position, moviesmList.size());
+//        notifyItemRangeChanged(position, favMoviesModelList.size());
     }
 }
