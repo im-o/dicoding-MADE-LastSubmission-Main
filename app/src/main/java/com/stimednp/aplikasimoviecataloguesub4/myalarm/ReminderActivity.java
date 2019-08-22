@@ -1,8 +1,5 @@
 package com.stimednp.aplikasimoviecataloguesub4.myalarm;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +8,6 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -20,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.stimednp.aplikasimoviecataloguesub4.R;
-import com.stimednp.aplikasimoviecataloguesub4.myservice.GetMovieReleaseService;
 
 public class ReminderActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar toolbarReminder;
@@ -132,7 +127,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         editor.apply();
     }
 
-    private void setAlarmDaily(){
+    private void setAlarmDaily() {
         alarmReceiverDaily.setOneTimeAlarm(this);
     }
 
@@ -140,7 +135,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         alarmReceiverDaily.cancelAlarm(this);
     }
 
-    private void setAlarmRelease(){
+    private void setAlarmRelease() {
         alarmReceiverRelease.setReleaseAlarm(this);
     }
 
@@ -149,12 +144,13 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showSnackbar(String msg) {
-        Snackbar snackbar = Snackbar.make(containerConstraint, msg, 4000);
+        Snackbar snackbar = Snackbar.make(containerConstraint, msg, 5000);
         snackbar.show();
     }
 
     @Override
     public void onClick(View v) {
+        String msg;
         int id = v.getId();
         if (id == llBtnSettLang.getId()) {
             Intent changeLangIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
@@ -163,19 +159,23 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         } else if (id == switchDaily.getId()) {
             if (switchDaily.isChecked()) {
                 setAlarmDaily();
-                showSnackbar("Reminder for return to app is enable, and will notify 07:00 am");
+                msg = getResources().getString(R.string.reminder_daily);
+                showSnackbar(msg);
             } else {
                 rebortAlarmDaily();
-                showSnackbar("Reminder for return to app is rebort");
+                msg = getResources().getString(R.string.reminder_rebort_daily);
+                showSnackbar(msg);
             }
 
         } else if (id == switchRelease.getId()) {
             if (switchRelease.isChecked()) {
                 setAlarmRelease();
-                showSnackbar("Reminder showing the movie that released today is enable, and will notify 08:00 am");
+                msg = getResources().getString(R.string.reminder_release);
+                showSnackbar(msg);
             } else {
                 rebortAlarmRelease();
-                showSnackbar("Reminder showing the movie that released today is rebort");
+                msg = getResources().getString(R.string.reminder_rebort_release);
+                showSnackbar(msg);
             }
         }
     }

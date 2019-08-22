@@ -28,16 +28,16 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta02'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
     implementation 'androidx.cardview:cardview:1.0.0'// use -ktx for Kotlin
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'androidx.viewpager2:viewpager2:1.0.0-beta03'
     implementation 'com.loopj.android:android-async-http:1.4.9'
 
-    def room_version = "2.2.0-alpha01" // 2.1.0 for latest stable version
+    def room_version = "2.2.0-alpha02" // 2.1.0 for latest stable version
     def paging_version = "2.1.0"
     def lifecycle_version = "2.0.0"
 

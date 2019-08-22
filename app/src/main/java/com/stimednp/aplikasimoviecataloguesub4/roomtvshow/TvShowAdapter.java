@@ -101,9 +101,11 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
             tvRelease.setText(myDate);
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
-            Glide.with(context)
-                    .load(pathImg + imgUrl)
-                    .into(imgvPoster);
+            if (imgUrl != null) {
+                Glide.with(context)
+                        .load(pathImg + imgUrl)
+                        .into(imgvPoster);
+            }
         }
     }
 }

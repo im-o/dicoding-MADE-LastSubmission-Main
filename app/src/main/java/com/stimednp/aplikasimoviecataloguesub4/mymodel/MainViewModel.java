@@ -141,34 +141,6 @@ public class MainViewModel extends ViewModel {
         });
     }
 
-    public void setReleaseMovies() {
-        APIMovieTv apiMovieTv = APIClientMovieTv.getClient().create(APIMovieTv.class);
-        Call<MoviesResponse> call = apiMovieTv.getMovieList(API_KEY, LANGUAGE);
-        final ArrayList<MovieItems> movieItems = new ArrayList<>();
-        call.enqueue(new Callback<MoviesResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MoviesResponse> call, @NonNull Response<MoviesResponse> response) {
-                List<MovieItems> movieItemList = null;
-                if (response.body() != null) {
-                    movieItemList = response.body().getResults();
-                }
-                try {
-                    if (movieItemList != null) {
-                        movieItems.addAll(movieItemList);
-                    }
-                    listMovies.postValue(movieItems);
-                } catch (Exception e) {
-                    Log.d(TAG, e.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<MoviesResponse> call, @NonNull Throwable t) {
-                Log.d(TAG, "ERROR : " + t.getMessage());
-            }
-        });
-    }
-
     public MutableLiveData<ArrayList<MovieItems>> getListMovies() {
         return listMovies;
     }

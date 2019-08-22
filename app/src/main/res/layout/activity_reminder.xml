@@ -26,7 +26,6 @@
             app:layout_collapseMode="pin">
 
             <TextView
-                android:id="@+id/tv_toolbar_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -51,7 +50,6 @@
         android:focusable="true">
 
         <TextView
-            android:id="@+id/tv_info_app"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -60,7 +58,7 @@
             android:gravity="center"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="Languange Settings"
+            android:text="@string/languange_settings"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="@android:color/black"
@@ -74,7 +72,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="80dp"
             android:layout_marginBottom="8dp"
-            android:text="Change your languages" />
+            android:text="@string/change_your_languages" />
 
         <View
             android:layout_width="match_parent"
@@ -142,7 +140,6 @@
         app:layout_constraintTop_toBottomOf="@+id/switch_daily_reminder" />
 
     <View
-        android:id="@+id/view3"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"

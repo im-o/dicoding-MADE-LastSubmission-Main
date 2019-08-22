@@ -12,7 +12,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -29,12 +28,13 @@ import java.util.Calendar;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.stimednp.aplikasimoviecataloguesub4.addingmethod.Constant.API_KEY;
+
 /**
  * Created by rivaldy on 8/18/2019.
  */
 
 public class AlarmReceiverRelease extends BroadcastReceiver {
-    private static final String API_KEY = "8b904530a7aced766995fa063ed27355";
     private static final String TAG = AlarmReceiverRelease.class.getSimpleName();
     private int notifId = (int) (-1 * System.currentTimeMillis());
     private int ALARM_ID = 101;
@@ -45,10 +45,8 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         String currentDate = AllOtherMethod.getCurrentDates();
-        Log.d(TAG, "Running date : " + currentDate);
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&primary_release_date.gte=" + currentDate + "&primary_release_date.lte=" + currentDate;
-        Log.e(TAG, "getCurrentthemoviedb: " + url);
         client.get(url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -61,7 +59,7 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
                         String titleMovie = responseObject.getJSONArray("results").getJSONObject(i).getString("title");
                         String strRelease = context.getResources().getString(R.string.str_release);
                         String message = titleMovie + ", " + strRelease;
-                        showAlarmNotification(context, titleMovie, message, notifId+i);
+                        showAlarmNotification(context, titleMovie, message, notifId + i);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

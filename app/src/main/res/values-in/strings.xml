@@ -3,7 +3,6 @@
     <string name="app_name">BoxOFFICE LASTSUB</string>
     <string name="name_tab1_movies">Film</string>
     <string name="name_tab2_tvshow">Acara Tv</string>
-    <string name="name_setting_lang">Pengaturan Bahasa</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</string>
     <string name="desc_img">Gambar</string>
     <string name="str_overview">DESKRIPSI</string>
@@ -24,17 +23,19 @@
     <string name="search_hint">Telusuri</string>
     <string name="db_empty_tvshows">Tidak ada data acara tv…</string>
     <string name="db_movies_empty">Tidak ada data film…</string>
-    <string name="add_widget">Add widget</string>
     <string name="appwidget_text">WIDGET BoxOFFICE LastSUB</string>
     <string name="no_data">No Data Widget</string>
-    <string name="reminder_showing">Reminder showing the movie that released today</string>
-    <string name="daily_reminder">Daily Reminder</string>
-    <string name="reminder_return">Reminder for return to app</string>
+    <string name="reminder_showing">Pengingat film yang rilis hari ini</string>
+    <string name="daily_reminder">Pengigat Harian</string>
+    <string name="reminder_return">Pengingat untuk kembali ke aplikasi</string>
     <string name="release_reminder">Pengingat film rilis</string>
-    <string name="reminder">"Pengingat "</string>
     <string name="str_missingu">Ayo cek film di BoxOffice Cuk!</string>
     <string name="str_release">rilis hari ini</string>
     <string name="str_settings">Pengaturan</string>
-    <string name="str_msg_move">Buka aplikasi BoxOFFICE LASTSUB ?</string>
-    <string name="str_msg_notf">Application BoxOFFICE LASTSUB not found (404) :)</string>
+    <string name="change_your_languages">Ganti Bahasa</string>
+    <string name="languange_settings">Pengaturan Bahasa</string>
+    <string name="reminder_daily">Pengingat film yang dirilis hari ini diaktifkan, dan akan memberi tahu pukul 08:00 pagi, atau akan mengingatkan anda sekarang.</string>
+    <string name="reminder_rebort_daily">Pengingat untuk kembali ke aplikasi dimatikan</string>
+    <string name="reminder_rebort_release">Pengingat yang film yang dirilis hari ini dimatikan</string>
+    <string name="reminder_release">Pengingat film yang rilis hari ini diaktifkan, dan akan memberi tahu pukul 08:00 pagi, atau hari ini</string>
 </resources>

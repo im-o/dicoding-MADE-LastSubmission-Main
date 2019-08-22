@@ -1,7 +1,6 @@
 package com.stimednp.aplikasimoviecataloguesub4.mydbadapter;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,6 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.Movi
 
     public FavMoviesAdapter(Activity mActivity) {
         this.mActivity = mActivity;
-    }
-
-    public ArrayList<MoviesModel> getmoviesmList() {
-        return moviesModelList;
     }
 
     public void setListMoviesm(ArrayList<MoviesModel> listMoviesModel) {
@@ -126,9 +121,11 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.Movi
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
             tvRelease.setText(myDate);
-            Glide.with(mActivity)
-                    .load(pathImg + imgUrl)
-                    .into(imgvPoster);
+            if (imgUrl != null) {
+                Glide.with(mActivity)
+                        .load(pathImg + imgUrl)
+                        .into(imgvPoster);
+            }
         }
     }
 }

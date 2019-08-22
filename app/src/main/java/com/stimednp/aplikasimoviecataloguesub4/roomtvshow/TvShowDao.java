@@ -21,7 +21,4 @@ public interface TvShowDao {
 
     @Query("DELETE FROM tvshows WHERE name= :name_tvshow")
     void deleteByTitle(String name_tvshow);
-
-    @Query("DELETE FROM tvshows WHERE id= :id")
-    void deleteById(int id);
 }

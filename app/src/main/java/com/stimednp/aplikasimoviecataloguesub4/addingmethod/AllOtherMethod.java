@@ -19,8 +19,7 @@ public class AllOtherMethod {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
             Date date = formatter.parse(changeFormat);
             return dateFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (ParseException ignored) {
         }
         return changeFormat;
     }
@@ -31,7 +30,7 @@ public class AllOtherMethod {
     }
 
     public String getLastYear(String setReleasedate) { //get year exp : (2018)
-        String releaseYear = "";
+        String releaseYear;
         if (setReleasedate.length() >= 4) {
             releaseYear = setReleasedate.substring(setReleasedate.length() - 4);
         } else {

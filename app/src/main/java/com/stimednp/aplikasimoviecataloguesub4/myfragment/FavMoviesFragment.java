@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.CONTENT_URI;
-import static com.stimednp.aplikasimoviecataloguesub4.myhelper.MappingHelper.mapCursorToArrayList;
+import static com.stimednp.aplikasimoviecataloguesub4.mydbmapcursor.MappingHelper.mapCursorToArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,10 +46,7 @@ public class FavMoviesFragment extends Fragment implements LoadFavMoviesCallback
     private FavMoviesAdapter favMoviesAdapter;
     private RecyclerView recyclervFavMovies;
     private static final String EXTRA_STATE = "EXTRA_STATE";
-
     private MoviesHelper moviesHelper;
-    private ArrayList<MoviesModel> moviesModelList;
-
     private SwipeRefreshLayout refreshLayoutMovie;
     private ProgressBar progressBarMovie;
     private TextView textViewEmpty;
@@ -113,7 +109,7 @@ public class FavMoviesFragment extends Fragment implements LoadFavMoviesCallback
                 intent.setData(uri);
                 intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
                 intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, moviesModel);
-                startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
+                startActivityForResult(intent, DetailsMovieActivity.REQUEST_FAV);
             }
         });
         refreshLayoutMovie.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -220,8 +216,8 @@ public class FavMoviesFragment extends Fragment implements LoadFavMoviesCallback
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
-            if (requestCode == DetailsMovieActivity.REQUEST_ADD) {
-                if (resultCode == DetailsMovieActivity.RESULT_ADD) {
+            if (requestCode == DetailsMovieActivity.REQUEST_FAV) {
+                if (resultCode == DetailsMovieActivity.RESULT_FAV) {
                     MoviesModel moviesModel = data.getParcelableExtra(DetailsMovieActivity.EXTRA_MOVIE);
                     favMoviesAdapter.addItem(moviesModel);
                     recyclervFavMovies.smoothScrollToPosition(favMoviesAdapter.getItemCount() - 1);

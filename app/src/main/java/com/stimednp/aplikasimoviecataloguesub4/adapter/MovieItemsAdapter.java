@@ -1,16 +1,13 @@
 package com.stimednp.aplikasimoviecataloguesub4.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -34,7 +31,6 @@ import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.Movi
 public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.MovieItemsViewHolder> {
     public static final String TAG = MovieItemsAdapter.class.getSimpleName();
     private ArrayList<MovieItems> moviesData = new ArrayList<>();
-//    private Context context;
     private Activity activity;
 
     public MovieItemsAdapter(Activity activity) {
@@ -65,12 +61,11 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             @Override
             public void onItemClicked(View view, int position) {
                 Intent intent = new Intent(activity, DetailsMovieActivity.class);
-                Uri uri = Uri.parse(CONTENT_URI+ "/" +getMoviesData().get(position).getId());
+                Uri uri = Uri.parse(CONTENT_URI + "/" + getMoviesData().get(position).getId());
                 intent.setData(uri);
                 intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
                 intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getMoviesData().get(position));
-//                context.startActivity(intent);
-                activity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
+                activity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_FAV);
             }
         }));
     }
@@ -97,7 +92,7 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             cardViewRating = itemView.findViewById(R.id.card_view_rating);
         }
 
-        void bind(MovieItems movieItems){
+        void bind(MovieItems movieItems) {
             String pathImg = "https://image.tmdb.org/t/p/w300_and_h450_bestv2";
             String title = movieItems.getTitle();
             String release = movieItems.getRelease_date();
@@ -106,7 +101,7 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             String imgUrl = movieItems.getPoster_path();
 
             AllOtherMethod allOtherMethod = new AllOtherMethod();
-            if (release != null){
+            if (release != null) {
                 String myDate = allOtherMethod.changeFormatDate(release);
                 tvRelease.setText(myDate);
             } else {
@@ -116,9 +111,11 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             tvTitle.setText(title);
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
-            Glide.with(activity)
-                    .load(pathImg + imgUrl)
-                    .into(imgvPoster);
+            if (imgUrl != null) {
+                Glide.with(activity)
+                        .load(pathImg + imgUrl)
+                        .into(imgvPoster);
+            }
         }
     }
 }

@@ -58,11 +58,11 @@ public class TvShow implements Parcelable {
         this.name = name;
     }
 
-    public String getOriginal_name() {
+    String getOriginal_name() {
         return original_name;
     }
 
-    public void setOriginal_name(String original_name) {
+    void setOriginal_name(String original_name) {
         this.original_name = original_name;
     }
 
@@ -114,7 +114,7 @@ public class TvShow implements Parcelable {
         this.backdrop_path = backdrop_path;
     }
 
-    public boolean isFavorite() {
+    boolean isFavorite() {
         return isFavorite;
     }
 
@@ -145,7 +145,7 @@ public class TvShow implements Parcelable {
     public TvShow() {
     }
 
-    protected TvShow(Parcel in) {
+    private TvShow(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
         this.original_name = in.readString();

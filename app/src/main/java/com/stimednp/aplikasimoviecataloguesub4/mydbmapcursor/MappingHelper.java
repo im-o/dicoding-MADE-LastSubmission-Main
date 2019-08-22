@@ -1,4 +1,4 @@
-package com.stimednp.aplikasimoviecataloguesub4.myhelper;
+package com.stimednp.aplikasimoviecataloguesub4.mydbmapcursor;
 
 import android.database.Cursor;
 
@@ -21,8 +21,8 @@ import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.Movi
 
 public class MappingHelper {
     /**
-     Karena nanti di adapter kita akan menggunakan arraylist, sedangkan di sini obyek yang di
-     kembalikan berupa Cursor maka dari itu kita harus mengonversi dari Cursor ke Arraylist
+     * Karena nanti di adapter kita akan menggunakan arraylist, sedangkan di sini obyek yang di
+     * kembalikan berupa Cursor maka dari itu kita harus mengonversi dari Cursor ke Arraylist
      */
     public static ArrayList<MoviesModel> mapCursorToArrayList(Cursor moviesCursor) {
         ArrayList<MoviesModel> modelArrayList = new ArrayList<>();

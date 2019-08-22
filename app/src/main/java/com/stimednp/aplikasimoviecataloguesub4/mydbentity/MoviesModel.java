@@ -6,7 +6,6 @@ import android.os.Parcelable;
 
 import com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract;
 
-import static android.provider.BaseColumns._ID;
 import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.getColumnDouble;
 import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.getColumnInt;
 import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.getColumnString;
@@ -130,7 +129,7 @@ public class MoviesModel implements Parcelable {
         this.vote_count = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_VOTE_COUNT);
         this.overview = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_OVERVIEW);
         this.poster_path = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_POSTER_PATH);
-        this.backdrop_path = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_BACK_PATH);;
+        this.backdrop_path = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_BACK_PATH);
     }
 
     private MoviesModel(Parcel in) {

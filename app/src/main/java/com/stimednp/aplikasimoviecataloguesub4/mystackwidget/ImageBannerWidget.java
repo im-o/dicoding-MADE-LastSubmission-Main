@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.stimednp.aplikasimoviecataloguesub4.R;
 
@@ -43,7 +42,7 @@ public class ImageBannerWidget extends AppWidgetProvider {
         if (intent.getAction() != null) {
             if (intent.getAction().equals(TOAST_ACTION)) {
                 int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-                Log.d("onReceive", "You touch "+viewIndex);
+                Log.d("onReceive", "You touch " + viewIndex);
             }
         }
         super.onReceive(context, intent);

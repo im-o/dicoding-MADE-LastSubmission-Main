@@ -23,7 +23,6 @@ import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.Movi
  */
 
 public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    //    private final List<Bitmap> mWidgetItems = new ArrayList<>();
     private Context mContext;
     private Cursor cursor;
     private ArrayList<MoviesModel> moviesList = new ArrayList<>();
@@ -58,9 +57,6 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
             }
         }
         Binder.restoreCallingIdentity(identifyToken);
-
-//        mWidgetItems.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.dr_stone));
-//        mWidgetItems.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.dr_stone_bg));
     }
 
     @Override
@@ -77,26 +73,28 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
         } else {
             return moviesList.size();
         }
-//        return mWidgetItems.size();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
         if (moviesList.size() != 0) {
-            String pathImg = "https://image.tmdb.org/t/p/w500" + moviesList.get(position).getBackdrop_path();
-            try {
-                Bitmap bitmap = Glide.with(mContext)
-                        .asBitmap()
-                        .load(pathImg)
-                        .submit(512, 512)
-                        .get();
+            Object urlImg = moviesList.get(position).getBackdrop_path();
+            if (urlImg != null) {
+                String pathImg = "https://image.tmdb.org/t/p/w500" + urlImg.toString();
+                try {
+                    Bitmap bitmap = Glide.with(mContext)
+                            .asBitmap()
+                            .load(pathImg)
+                            .submit(512, 512)
+                            .get();
 
-                mRemoteViews.setImageViewBitmap(R.id.imgv_item_widget, bitmap);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                    mRemoteViews.setImageViewBitmap(R.id.imgv_item_widget, bitmap);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

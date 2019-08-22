@@ -2,10 +2,6 @@
 <resources>
 
     <color name="colorSecondaryText">#75FFFFFF</color>
-    <!--<color name="colorPrimary">#5A36B1</color>-->
-    <!--<color name="colorPrimaryDark">#512DA8</color>-->
-    <!--<color name="colorAccent">#7C4DFF</color>-->
-
     <color name="colorPrimary">#673AB7</color>
     <color name="colorPrimaryDark">#512DA8</color>
     <color name="colorAccent">#7C4DFF</color>

@@ -4,18 +4,14 @@ package com.stimednp.aplikasimoviecataloguesub4.myfragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -54,7 +50,6 @@ public class FavTvShowFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        setHasOptionsMenu(true);// calll fung menu
         textViewEmpty = view.findViewById(R.id.tv_tvshow_empty);
         progressBarMovie = view.findViewById(R.id.progressbar_tab_tvshow_room);
         refreshLayoutMovie = view.findViewById(R.id.swipe_scroll_tvshow_room);

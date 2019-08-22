@@ -25,17 +25,15 @@ import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavMoviesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavTvShowFragment;
 
 public class MainActivity extends AppCompatActivity {
-    Fragment fragment;
-    boolean doubleButtonBackExit;
-    Toolbar toolbar;
-    TextView tvToolbarMain;
-    String strMovies, strTvShow, strFav;
+    private boolean doubleButtonBackExit;
+    private TextView tvToolbarMain;
+    private String strMovies, strTvShow, strFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.main_tollbar);
+        Toolbar toolbar = findViewById(R.id.main_tollbar);
         tvToolbarMain = findViewById(R.id.tv_toolbar_main);
 
         setSupportActionBar(toolbar);
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setDefaultFragment(BottomNavigationView navView) {
-        fragment = new NavMoviesFragment();
+        Fragment fragment = new NavMoviesFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment_container, fragment, fragment.getClass().getSimpleName())
@@ -112,21 +110,6 @@ public class MainActivity extends AppCompatActivity {
             SearchView searchView = (SearchView) (menu.findItem(R.id.itemm_search)).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setQueryHint(getResources().getString(R.string.search_hint));
-//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextSubmit(String query) {
-//                    gotoSearchData(query);
-//                    Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
-//                    return true;
-//                }
-//
-//                @Override
-//                public boolean onQueryTextChange(String newText) {
-//                    gotoSearchData(newText);
-//                    Toast.makeText(MainActivity.this, newText, Toast.LENGTH_SHORT).show();
-//                    return true;
-//                }
-//            });
         }
 
         return true;

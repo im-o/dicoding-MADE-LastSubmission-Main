@@ -2,18 +2,14 @@ package com.stimednp.aplikasimoviecataloguesub4.myfragment;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -25,11 +21,12 @@ import com.stimednp.aplikasimoviecataloguesub4.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavFavoritesFragment extends Fragment{
+public class NavFavoritesFragment extends Fragment {
     Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -56,8 +53,8 @@ public class NavFavoritesFragment extends Fragment{
     }
 
     private void setTabIcon() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -110,14 +107,8 @@ public class NavFavoritesFragment extends Fragment{
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         MenuItem item = menu.findItem(R.id.itemm_search);
-        if (item != null){
+        if (item != null) {
             item.setVisible(false);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("NAV FAVOR", "onResume: ");
     }
 }

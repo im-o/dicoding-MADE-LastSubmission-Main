@@ -7,7 +7,7 @@ import android.database.Cursor;
  */
 
 public interface LoadFavMoviesCallback {
-    void preExecute();
     void postExecute(Cursor cursor);
-//    void postExecute(ArrayList<MoviesModel> moviesModelList);
+
+    void preExecute();
 }

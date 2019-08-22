@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,7 +104,6 @@ public class NavTvShowFragment extends Fragment implements SwipeRefreshLayout.On
     };
 
     private void checkingNetwork() {
-//        refreshLayoutMovie.setRefreshing(true);
         if (getContext() != null) {
             if (CheckNetwork.isInternetAvailable(getContext())) {
                 int status = CheckNetwork.statusInternet;
@@ -131,6 +129,7 @@ public class NavTvShowFragment extends Fragment implements SwipeRefreshLayout.On
             }
         }
     }
+
     private void timeRecyclerLoadFalse() {
         new Handler().postDelayed(new Runnable() {
             @Override

@@ -93,7 +93,7 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         public void onChanged(ArrayList<MovieItems> movieItems) {
             if (movieItemsAdapter != null) {
                 movieItemsAdapter.setMoviesData(movieItems);
-                if (movieItems.size() < 1 ) {
+                if (movieItems.size() < 1) {
                     textViewEmpty.setVisibility(View.VISIBLE);
                 } else {
                     textViewEmpty.setVisibility(View.INVISIBLE);
@@ -104,14 +104,12 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
     };
 
     private void checkingNetwork() {
-//        refreshLayoutMovie.setRefreshing(true);
         if (getContext() != null) {
             if (CheckNetwork.isInternetAvailable(getContext())) {
                 int status = CheckNetwork.statusInternet;
                 if (status == 1) {//connected
                     showRecyclerList(textSearch);
-                }
-                else if (status == 0) {//disconnect
+                } else if (status == 0) {//disconnect
                     timeRecyclerLoadFalse();
                     Snackbar snackbar = Snackbar.make(frameLayoutMovie, noInternet, Snackbar.LENGTH_SHORT).setAction(tryAgain, new View.OnClickListener() {
                         @Override

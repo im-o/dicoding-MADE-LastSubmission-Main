@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -28,6 +27,7 @@ import java.util.Calendar;
 public class AlarmReceiverDaily extends BroadcastReceiver {
     private int ALARM_ID = 102;
     private int notifId = (int) (-1 * System.currentTimeMillis());
+
     public AlarmReceiverDaily() {
     }
 

@@ -96,7 +96,7 @@ public class TvShowItemsAdapter extends RecyclerView.Adapter<TvShowItemsAdapter.
             String imgUrl = tvShowItems.getPoster_path();
 
             AllOtherMethod allOtherMethod = new AllOtherMethod();
-            if (release != null){
+            if (release != null) {
                 String myDate = allOtherMethod.changeFormatDate(release);
                 tvRelease.setText(myDate);
             } else {
@@ -106,9 +106,11 @@ public class TvShowItemsAdapter extends RecyclerView.Adapter<TvShowItemsAdapter.
             tvTitle.setText(title);
             tvRating.setText(voteValue);
             tvDesc.setText(overView);
-            Glide.with(context)
-                    .load(pathImg + imgUrl)
-                    .into(imgvPoster);
+            if (imgUrl != null) {
+                Glide.with(context)
+                        .load(pathImg + imgUrl)
+                        .into(imgvPoster);
+            }
         }
     }
 }

@@ -11,5 +11,5 @@
         android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="ifRoom|collapseActionView"
         android:id="@+id/itemm_reminder"
-        android:title="Settings"/>
+        android:title="Settings" />
 </menu>

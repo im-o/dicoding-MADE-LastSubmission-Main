@@ -1,17 +1,14 @@
 package com.stimednp.aplikasimoviecataloguesub4.mydb;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.annotation.Nullable;
 
 /**
  * Created by rivaldy on 8/19/2019.
  */
 
-    public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static String DATABASE_NAME = "db_list_movie";
     private static final int DATABASE_VERSION = 1;
