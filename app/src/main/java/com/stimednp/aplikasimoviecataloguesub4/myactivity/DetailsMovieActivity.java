@@ -182,9 +182,9 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 tvMovieRelease.setText(tvShowDate);
                 tvMovieRating.setText(tvShowRating);
                 tvMovieVoteCount.setText(tvShowVoteCount);
-                if (movieUrlPhoto != null)
+                if (tvShowUrlPhoto != null)
                     Glide.with(getApplicationContext()).load(pathImg + movieUrlPhoto).into(imgViewFromUrl);
-                if (movieUrlBg != null)
+                if (tvShowUrlBg != null)
                     Glide.with(getApplicationContext()).load(pathImg + movieUrlBg).into(imgViewBg);
             }
         } else if (whereFrom.equals(FavMoviesAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))) { //for details MoviesAdapter from dbroom
@@ -235,9 +235,9 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 tvMovieRelease.setText(tvShowDate);
                 tvMovieRating.setText(tvShowRating);
                 tvMovieVoteCount.setText(tvShowVoteCount);
-                if (movieUrlPhoto != null)
+                if (tvShowUrlPhoto != null)
                     Glide.with(getApplicationContext()).load(pathImg + movieUrlPhoto).into(imgViewFromUrl);
-                if (movieUrlBg != null)
+                if (tvShowUrlBg != null)
                     Glide.with(getApplicationContext()).load(pathImg + movieUrlBg).into(imgViewBg);
             }
         }
