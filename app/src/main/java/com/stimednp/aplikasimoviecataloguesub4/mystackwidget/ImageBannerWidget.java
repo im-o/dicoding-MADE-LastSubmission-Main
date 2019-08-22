@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -15,8 +16,8 @@ import com.stimednp.aplikasimoviecataloguesub4.R;
  * Implementation of App Widget functionality.
  */
 public class ImageBannerWidget extends AppWidgetProvider {
-    private static final String TOAST_ACTION = "toast_action";
-    public static final String EXTRA_ITEM = "extra_item";
+    private static final String TOAST_ACTION = "com.stimednp.aplikasimoviecataloguesub4.TOAST_ACTION";
+    public static final String EXTRA_ITEM = "com.stimednp.aplikasimoviecataloguesub4.EXTRA_ITEM";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Intent intent = new Intent(context, StackWidgetService.class);
@@ -33,20 +34,19 @@ public class ImageBannerWidget extends AppWidgetProvider {
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
-
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
-        if (intent.getAction() != null){
-            if (intent.getAction().equals(TOAST_ACTION)){
+        if (intent.getAction() != null) {
+            if (intent.getAction().equals(TOAST_ACTION)) {
                 int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-                Toast.makeText(context, "Touch : "+viewIndex, Toast.LENGTH_SHORT).show();
+                Log.d("onReceive", "You touch "+viewIndex);
             }
         }
+        super.onReceive(context, intent);
     }
 
     @Override
@@ -54,16 +54,6 @@ public class ImageBannerWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
     }
 }
 

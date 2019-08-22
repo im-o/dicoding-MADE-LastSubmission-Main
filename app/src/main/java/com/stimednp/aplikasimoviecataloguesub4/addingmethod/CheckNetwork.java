@@ -15,16 +15,17 @@ public class CheckNetwork {
 
     public static boolean isInternetAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if ((connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED)
-                && (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED)) {
-            Log.w(TAG, "No internet Connection");
-            statusInternet = 0;//DISCONNECTED
+
+        if ((connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED)
+                || (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)) {
+            Log.w(TAG, "Internet Connection Available");
+            statusInternet = 1;//CONNECTED
             return true;
         } else {
-            if ((connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED)
-                    || (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)) {
-                Log.w(TAG, "Internet Connection Available");
-                statusInternet = 1;//CONNECTED
+            if ((connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED)
+                    && (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED)) {
+                Log.w(TAG, "No internet Connection");
+                statusInternet = 0;//DISCONNECTED
                 return true;
             } else {
                 Log.w(TAG, "Internet Connection");

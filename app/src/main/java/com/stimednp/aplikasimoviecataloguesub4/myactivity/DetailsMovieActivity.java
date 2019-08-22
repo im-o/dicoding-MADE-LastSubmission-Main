@@ -1,6 +1,8 @@
 package com.stimednp.aplikasimoviecataloguesub4.myactivity;
 
 import android.annotation.SuppressLint;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +37,8 @@ import com.stimednp.aplikasimoviecataloguesub4.mydbentity.MoviesModel;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.FavMoviesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.TvShowItems;
+import com.stimednp.aplikasimoviecataloguesub4.mystackwidget.ImageBannerWidget;
+import com.stimednp.aplikasimoviecataloguesub4.mystackwidget.StackWidgetService;
 import com.stimednp.aplikasimoviecataloguesub4.roomdb.TvShowRoomDatabase;
 import com.stimednp.aplikasimoviecataloguesub4.roomtvshow.TvShow;
 import com.stimednp.aplikasimoviecataloguesub4.roomtvshow.TvShowAdapter;
@@ -284,6 +289,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         getContentResolver().insert(CONTENT_URI, values);
         showSnackBar(movieTitle+" "+strMsgSuccessInsert);
         setResult(RESULT_ADD, intent);
+        updateMyfavmoviesWidget();
     }
 
     private void deleteMovies() { //delete
@@ -292,6 +298,22 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         getContentResolver().delete(uri, null, null);
         showSnackBar(movieTitle+" "+strMsgSuccessDelete);
         setResult(RESULT_DELETE, intent);
+        updateMyfavmoviesWidget();
+    }
+
+    private void updateMyfavmoviesWidget(){
+        Context context = getApplicationContext();
+//        Intent intent = new Intent(context, ImageBannerWidget.class);
+//        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+//        int[] idAppWidget = widgetManager.getAppWidgetIds(new ComponentName(context, ImageBannerWidget.class));
+//        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, idAppWidget);
+//        sendBroadcast(intent);
+
+        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+        ComponentName componentName = new ComponentName(context, ImageBannerWidget.class);
+        int[] idAppWidget = widgetManager.getAppWidgetIds(componentName);
+        widgetManager.notifyAppWidgetViewDataChanged(idAppWidget, R.id.stack_view);
     }
 
     private void setTvShows() {

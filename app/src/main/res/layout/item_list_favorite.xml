@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:paddingStart="@dimen/margin_size_low_small"
+    android:paddingTop="4dp"
     android:paddingEnd="@dimen/margin_size_low_small"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp">
+    android:paddingBottom="4dp">
 
     <androidx.cardview.widget.CardView
-        android:foreground="@drawable/bg_onclick_transparant"
         android:id="@+id/card_view_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_size_low"
         android:layout_marginTop="@dimen/margin_size_low"
+        android:foreground="@drawable/bg_onclick_transparant"
         app:cardCornerRadius="@dimen/size_corner_low"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -37,7 +37,6 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:foreground="@drawable/bg_onclick_transparant"
         android:id="@+id/card_img"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -45,6 +44,7 @@
         android:layout_marginTop="@dimen/margin_size_low"
         android:layout_marginEnd="@dimen/margin_size_low"
         android:layout_marginBottom="@dimen/margin_size_low"
+        android:foreground="@drawable/bg_onclick_transparant"
         app:cardCornerRadius="@dimen/size_corner_low"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

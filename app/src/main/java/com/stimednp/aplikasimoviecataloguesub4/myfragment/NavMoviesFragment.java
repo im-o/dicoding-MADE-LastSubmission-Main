@@ -108,7 +108,10 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
         if (getContext() != null) {
             if (CheckNetwork.isInternetAvailable(getContext())) {
                 int status = CheckNetwork.statusInternet;
-                if (status == 0) {//disconnect
+                if (status == 1) {//connected
+                    showRecyclerList(textSearch);
+                }
+                else if (status == 0) {//disconnect
                     timeRecyclerLoadFalse();
                     Snackbar snackbar = Snackbar.make(frameLayoutMovie, noInternet, Snackbar.LENGTH_SHORT).setAction(tryAgain, new View.OnClickListener() {
                         @Override
@@ -118,8 +121,6 @@ public class NavMoviesFragment extends Fragment implements SwipeRefreshLayout.On
                     });
                     snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                     snackbar.show();
-                } else if (status == 1) {//connected
-                    showRecyclerList(textSearch);
                 } else if (status == 2) {//reconnection
                     Toast.makeText(getContext(), reconnect, Toast.LENGTH_SHORT).show();
                 } else {

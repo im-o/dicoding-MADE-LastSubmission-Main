@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+
     <ImageView
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:id="@+id/imgv_item_widget"
-        tools:srcCompat="@drawable/dr_stone_bg"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/desc_img"
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/dr_stone_bg" />
+</RelativeLayout>

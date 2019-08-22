@@ -25,8 +25,8 @@
     <string name="db_empty_tvshows">Data list Tv Show is empty…</string>
     <string name="db_movies_empty">Data movies is empty…</string>
     <string name="add_widget">Add widget</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="no_data">No Data</string>
+    <string name="appwidget_text">WIDGET BoxOFFICE LastSUB</string>
+    <string name="no_data">No Data Widget</string>
     <string name="reminder_showing">Reminder showing the movie that released today</string>
     <string name="daily_reminder">Daily Reminder</string>
     <string name="reminder_return">Reminder for return to app</string>
@@ -35,4 +35,6 @@
     <string name="str_missingu">Catalogue Movie missing you!</string>
     <string name="str_release">Is release today</string>
     <string name="str_settings">Settings</string>
+    <string name="str_msg_move">Want to open BoxOFFICE LASTSUB ?</string>
+    <string name="str_msg_notf">Application BoxOFFICE LASTSUB not found (404) :)</string>
 </resources>

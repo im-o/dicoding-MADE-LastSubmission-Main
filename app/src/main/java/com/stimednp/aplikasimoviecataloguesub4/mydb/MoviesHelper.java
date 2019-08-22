@@ -201,7 +201,7 @@ public class MoviesHelper {
                 null,
                 null,
                 null,
-                ID + " ASC");
+                COLUMN_TITLE + " ASC");
     }
 
     public long insertProvider(ContentValues values){
