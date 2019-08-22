@@ -34,7 +34,7 @@
     <string name="str_settings">Pengaturan</string>
     <string name="change_your_languages">Ganti Bahasa</string>
     <string name="languange_settings">Pengaturan Bahasa</string>
-    <string name="reminder_daily">Pengingat film yang dirilis hari ini diaktifkan, dan akan memberi tahu pukul 08:00 pagi, hari ini.</string>
+    <string name="reminder_daily">Pengingat film yang dirilis hari ini diaktifkan, dan akan memberi tahu pukul 08:00 pagi, atau hari ini.</string>
     <string name="reminder_rebort_daily">Pengingat untuk kembali ke aplikasi dimatikan</string>
     <string name="reminder_rebort_release">Pengingat yang film yang dirilis hari ini dimatikan</string>
     <string name="reminder_release">Pengingat film yang rilis hari ini diaktifkan, dan akan memberi tahu pukul 08:00 pagi, atau hari ini</string>
