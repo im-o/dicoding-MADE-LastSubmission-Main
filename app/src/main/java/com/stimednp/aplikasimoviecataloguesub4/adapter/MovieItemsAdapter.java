@@ -3,6 +3,7 @@ package com.stimednp.aplikasimoviecataloguesub4.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import com.stimednp.aplikasimoviecataloguesub4.myactivity.DetailsMovieActivity;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
 
 import java.util.ArrayList;
+
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.CONTENT_URI;
 
 /**
  * Created by rivaldy on 8/4/2019.
@@ -62,6 +65,8 @@ public class MovieItemsAdapter extends RecyclerView.Adapter<MovieItemsAdapter.Mo
             @Override
             public void onItemClicked(View view, int position) {
                 Intent intent = new Intent(activity, DetailsMovieActivity.class);
+                Uri uri = Uri.parse(CONTENT_URI+ "/" +getMoviesData().get(position).getId());
+                intent.setData(uri);
                 intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
                 intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getMoviesData().get(position));
 //                context.startActivity(intent);

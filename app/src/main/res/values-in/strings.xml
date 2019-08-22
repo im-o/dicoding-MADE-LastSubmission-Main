@@ -17,8 +17,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="favorite">Favorit Saya</string>
     <string name="tap_to_close">Tap 2x untuk keluar</string>
-    <string name="str_msg_add_fav">Ditambahkan ke daftar favorit saya..</string>
-    <string name="str_msg_delete_fav">Dihapus dari daftar favorit saya..</string>
+    <string name="str_msg_add_fav">ditambahkan ke daftar favorit saya..</string>
+    <string name="str_msg_delete_fav">dihapus dari daftar favorit saya..</string>
     <string name="movies_empty">Daftar film favorit anda masih kosong..</string>
     <string name="empty_tvshows">Daftar acara tv favorit anda masih kosong..</string>
     <string name="search_hint">Telusuri</string>
@@ -30,4 +30,9 @@
     <string name="reminder_showing">Reminder showing the movie that released today</string>
     <string name="daily_reminder">Daily Reminder</string>
     <string name="reminder_return">Reminder for return to app</string>
+    <string name="release_reminder">Pengingat film rilis</string>
+    <string name="reminder">"Pengingat "</string>
+    <string name="str_missingu">Ayo cek film di BoxOffice Cuk!</string>
+    <string name="str_release">rilis hari ini</string>
+    <string name="str_settings">Pengaturan</string>
 </resources>

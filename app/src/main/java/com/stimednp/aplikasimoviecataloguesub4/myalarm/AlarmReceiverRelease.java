@@ -21,6 +21,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
+import com.stimednp.aplikasimoviecataloguesub4.myactivity.MainActivity;
 
 import org.json.JSONObject;
 
@@ -36,6 +37,7 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
     private static final String API_KEY = "8b904530a7aced766995fa063ed27355";
     private static final String TAG = AlarmReceiverRelease.class.getSimpleName();
     private int notifId = (int) (-1 * System.currentTimeMillis());
+    private int ALARM_ID = 101;
 
     public AlarmReceiverRelease() {
     }
@@ -77,12 +79,12 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
     public void setReleaseAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverRelease.class);
+
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 8);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
         if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -90,6 +92,9 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
     }
 
     private void showAlarmNotification(Context context, String title, String message, int notifyId) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notifyId, intent, PendingIntent.FLAG_ONE_SHOT);
         String CHANNEL_ID = "Channel_2";
         String CHANNEL_NAME = "AlarmManagerRelease channel";
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -100,7 +105,10 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
                 .setContentText(message)
                 .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
-                .setSound(alarmSound);
+                .setSound(alarmSound)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     CHANNEL_NAME,
@@ -121,7 +129,7 @@ public class AlarmReceiverRelease extends BroadcastReceiver {
     public void cancelAlarmRelease(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverRelease.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
         pendingIntent.cancel();
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);

@@ -149,7 +149,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showSnackbar(String msg) {
-        Snackbar snackbar = Snackbar.make(containerConstraint, msg, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(containerConstraint, msg, 4000);
         snackbar.show();
     }
 

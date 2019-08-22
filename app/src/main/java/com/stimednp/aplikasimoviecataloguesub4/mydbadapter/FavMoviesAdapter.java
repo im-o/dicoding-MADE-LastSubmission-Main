@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
-import com.stimednp.aplikasimoviecataloguesub4.mydbentity.FavMoviesModel;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.MoviesModel;
 
 import java.util.ArrayList;
 
@@ -26,32 +26,44 @@ import java.util.ArrayList;
 public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.MoviesmViewHolder> {
     public static final String TAG = FavMoviesAdapter.class.getSimpleName();
     private Activity mActivity;
-    private ArrayList<FavMoviesModel> favMoviesModelList = new ArrayList<>();
+    private ArrayList<MoviesModel> moviesModelList = new ArrayList<>();
 
     public FavMoviesAdapter(Activity mActivity) {
         this.mActivity = mActivity;
     }
 
-    public ArrayList<FavMoviesModel> getmoviesmList() {
-        return favMoviesModelList;
+    public ArrayList<MoviesModel> getmoviesmList() {
+        return moviesModelList;
     }
 
-    public void setListMoviesm(ArrayList<FavMoviesModel> listFavMoviesModel) {
-        if (listFavMoviesModel.size() > 0) {
-            this.favMoviesModelList.clear();
+    public void setListMoviesm(ArrayList<MoviesModel> listMoviesModel) {
+        if (listMoviesModel.size() > 0) {
+            this.moviesModelList.clear();
         }
-        this.favMoviesModelList.addAll(listFavMoviesModel);
+        this.moviesModelList.addAll(listMoviesModel);
         notifyDataSetChanged();
+    }
+
+    public void addItem(MoviesModel moviesModel) {
+        this.moviesModelList.add(moviesModel);
+        notifyItemInserted(moviesModelList.size() - 1);
+    }
+
+    public void removeItem(int position) {
+        this.moviesModelList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, moviesModelList.size());
     }
 
     //click custome
     private OnItemClickCallback onItemClickCallback;
-    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback){
+
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
 
     public interface OnItemClickCallback {
-        void onItemClicked(FavMoviesModel favMoviesModel);
+        void onItemClicked(MoviesModel moviesModel);
     }
 
     @NonNull
@@ -66,30 +78,18 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.Movi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickCallback.onItemClicked(favMoviesModelList.get(holder.getAdapterPosition()));
+                onItemClickCallback.onItemClicked(moviesModelList.get(holder.getAdapterPosition()));
             }
         });
-        holder.bind(favMoviesModelList.get(position));
-//        holder.cardViewDesc.setOnClickListener(new CustomeOnItemClickListener(position, new CustomeOnItemClickListener.OnItemClickCallback() {
-//            @Override
-//            public void onItemClicked(View view, int position) {
-//                Toast.makeText(mActivity, "KLIK", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(mActivity, DetailsMovieActivity.class);
-//                intent.putExtra(DetailsMovieActivity.EXTRA_WHERE_FROM, TAG);
-//                intent.putExtra(DetailsMovieActivity.EXTRA_POSITION, position);
-//                intent.putExtra(DetailsMovieActivity.EXTRA_MOVIE, getmoviesmList().get(position));
-////                activity.startActivity(intent);
-//                mActivity.startActivityForResult(intent, DetailsMovieActivity.REQUEST_ADD);
-//            }
-//        }));
+        holder.bind(moviesModelList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        if (favMoviesModelList == null) {
+        if (moviesModelList == null) {
             return 0;
         } else {
-            return favMoviesModelList.size();
+            return moviesModelList.size();
         }
     }
 
@@ -112,7 +112,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.Movi
             recyclerView = itemView.findViewById(R.id.rv_tab_movies_room);
         }
 
-        void bind(FavMoviesModel movieItems) {
+        void bind(MoviesModel movieItems) {
             String pathImg = "https://image.tmdb.org/t/p/w300_and_h450_bestv2";
             String title = movieItems.getTitle();
             String release = movieItems.getRelease_date();
@@ -130,27 +130,5 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.Movi
                     .load(pathImg + imgUrl)
                     .into(imgvPoster);
         }
-    }
-
-    public void addItem(FavMoviesModel favMoviesModel) {
-        this.favMoviesModelList.add(favMoviesModel);
-        notifyItemInserted(favMoviesModelList.size() - 1);
-    }
-
-    public void updateItem(int position, FavMoviesModel favMoviesModel) {
-        this.favMoviesModelList.set(position, favMoviesModel);
-        notifyItemChanged(position, favMoviesModel);
-    }
-
-    public void removeItem(int position) {
-        Log.d(TAG, "removeItem position : "+position);
-        this.favMoviesModelList.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, favMoviesModelList.size());
-    }
-
-    public void reloadItem() {
-        notifyDataSetChanged();
-//        notifyItemRangeChanged(position, favMoviesModelList.size());
     }
 }

@@ -17,8 +17,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="favorite">My Favorite</string>
     <string name="tap_to_close">Tap 2x for exit</string>
-    <string name="str_msg_add_fav">Added on my favorite list..</string>
-    <string name="str_msg_delete_fav">Remove from my favorite list..</string>
+    <string name="str_msg_add_fav">added to my favorite list…</string>
+    <string name="str_msg_delete_fav">remove from my favorite list…</string>
     <string name="movies_empty">Your favorite list movies is empty..</string>
     <string name="empty_tvshows">Your favorite list Tv Show is empty..</string>
     <string name="search_hint">Search</string>
@@ -30,4 +30,9 @@
     <string name="reminder_showing">Reminder showing the movie that released today</string>
     <string name="daily_reminder">Daily Reminder</string>
     <string name="reminder_return">Reminder for return to app</string>
+    <string name="release_reminder">Release Reminder</string>
+    <string name="reminder">Reminder</string>
+    <string name="str_missingu">Catalogue Movie missing you!</string>
+    <string name="str_release">Is release today</string>
+    <string name="str_settings">Settings</string>
 </resources>

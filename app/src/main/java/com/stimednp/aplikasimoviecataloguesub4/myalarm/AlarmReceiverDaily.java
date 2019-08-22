@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.stimednp.aplikasimoviecataloguesub4.R;
+import com.stimednp.aplikasimoviecataloguesub4.myactivity.MainActivity;
 
 import java.util.Calendar;
 
@@ -25,6 +26,7 @@ import java.util.Calendar;
  */
 
 public class AlarmReceiverDaily extends BroadcastReceiver {
+    private int ALARM_ID = 102;
     private int notifId = (int) (-1 * System.currentTimeMillis());
     public AlarmReceiverDaily() {
     }
@@ -39,12 +41,13 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
     public void setOneTimeAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverDaily.class);
+
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 7);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
         if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -52,6 +55,9 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
     }
 
     private void showAlarmNotification(Context context, String title, String message, int notifId) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notifId, intent, PendingIntent.FLAG_ONE_SHOT);
         String CHANNEL_ID = "Channel_1";
         String CHANNEL_NAME = "AlarmManagerDaily channel";
         NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -62,7 +68,11 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
                 .setContentText(message)
                 .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
-                .setSound(alarmSound);
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                .setSound(alarmSound)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.enableVibration(true);
@@ -81,7 +91,7 @@ public class AlarmReceiverDaily extends BroadcastReceiver {
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverDaily.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notifId, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID, intent, 0);
         pendingIntent.cancel();
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);

@@ -1,13 +1,21 @@
 package com.stimednp.aplikasimoviecataloguesub4.mydbentity;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract;
+
+import static android.provider.BaseColumns._ID;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.getColumnDouble;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.getColumnInt;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.getColumnString;
 
 /**
  * Created by rivaldy on 8/19/2019.
  */
 
-public class FavMoviesModel implements Parcelable {
+public class MoviesModel implements Parcelable {
     private int id;
     private String title;
     private String release_date;
@@ -99,10 +107,33 @@ public class FavMoviesModel implements Parcelable {
         dest.writeString(this.backdrop_path);
     }
 
-    public FavMoviesModel() {
+    public MoviesModel() {
     }
 
-    private FavMoviesModel(Parcel in) {
+    public MoviesModel(int id, String title, String release_date, Double vote_average, String vote_count,
+                       String overview, String poster_path, String backdrop_path) {
+        this.id = id;
+        this.title = title;
+        this.release_date = release_date;
+        this.vote_average = vote_average;
+        this.vote_count = vote_count;
+        this.overview = overview;
+        this.poster_path = poster_path;
+        this.backdrop_path = backdrop_path;
+    }
+
+    public MoviesModel(Cursor cursor) {
+        this.id = getColumnInt(cursor, DatabaseContract.MovieColumns.ID);
+        this.title = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_TITLE);
+        this.release_date = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_RELEASE_DATE);
+        this.vote_average = getColumnDouble(cursor, DatabaseContract.MovieColumns.COLUMN_VOTE_AVERAGE);
+        this.vote_count = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_VOTE_COUNT);
+        this.overview = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_OVERVIEW);
+        this.poster_path = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_POSTER_PATH);
+        this.backdrop_path = getColumnString(cursor, DatabaseContract.MovieColumns.COLUMN_BACK_PATH);;
+    }
+
+    private MoviesModel(Parcel in) {
         this.id = in.readInt();
         this.title = in.readString();
         this.release_date = in.readString();
@@ -113,15 +144,15 @@ public class FavMoviesModel implements Parcelable {
         this.backdrop_path = in.readString();
     }
 
-    public static final Creator<FavMoviesModel> CREATOR = new Creator<FavMoviesModel>() {
+    public static final Creator<MoviesModel> CREATOR = new Creator<MoviesModel>() {
         @Override
-        public FavMoviesModel createFromParcel(Parcel source) {
-            return new FavMoviesModel(source);
+        public MoviesModel createFromParcel(Parcel source) {
+            return new MoviesModel(source);
         }
 
         @Override
-        public FavMoviesModel[] newArray(int size) {
-            return new FavMoviesModel[size];
+        public MoviesModel[] newArray(int size) {
+            return new MoviesModel[size];
         }
     };
 }

@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 
 public class MovieItems implements Parcelable {
+    private int id;
     private String title;
     private String original_title;
     private String release_date;
@@ -17,6 +18,14 @@ public class MovieItems implements Parcelable {
     private String poster_path;
     private String backdrop_path;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -25,12 +34,28 @@ public class MovieItems implements Parcelable {
         this.title = title;
     }
 
+    public String getOriginal_title() {
+        return original_title;
+    }
+
+    public void setOriginal_title(String original_title) {
+        this.original_title = original_title;
+    }
+
     public String getRelease_date() {
         return release_date;
     }
 
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
+    }
+
     public Double getVote_average() {
         return vote_average;
+    }
+
+    public void setVote_average(Double vote_average) {
+        this.vote_average = vote_average;
     }
 
     public String getVote_count() {
@@ -73,6 +98,7 @@ public class MovieItems implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeString(this.title);
         dest.writeString(this.original_title);
         dest.writeString(this.release_date);
@@ -86,7 +112,8 @@ public class MovieItems implements Parcelable {
     public MovieItems() {
     }
 
-    private MovieItems(Parcel in) {
+    protected MovieItems(Parcel in) {
+        this.id = in.readInt();
         this.title = in.readString();
         this.original_title = in.readString();
         this.release_date = in.readString();
@@ -97,7 +124,7 @@ public class MovieItems implements Parcelable {
         this.backdrop_path = in.readString();
     }
 
-    public static final Parcelable.Creator<MovieItems> CREATOR = new Parcelable.Creator<MovieItems>() {
+    public static final Creator<MovieItems> CREATOR = new Creator<MovieItems>() {
         @Override
         public MovieItems createFromParcel(Parcel source) {
             return new MovieItems(source);

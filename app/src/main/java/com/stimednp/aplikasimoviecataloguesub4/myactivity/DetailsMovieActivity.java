@@ -1,10 +1,13 @@
 package com.stimednp.aplikasimoviecataloguesub4.myactivity;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +15,6 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,9 +29,8 @@ import com.stimednp.aplikasimoviecataloguesub4.R;
 import com.stimednp.aplikasimoviecataloguesub4.adapter.MovieItemsAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.adapter.TvShowItemsAdapter;
 import com.stimednp.aplikasimoviecataloguesub4.addingmethod.AllOtherMethod;
-import com.stimednp.aplikasimoviecataloguesub4.mydb.FavMoviesHelper;
 import com.stimednp.aplikasimoviecataloguesub4.mydbadapter.FavMoviesAdapter;
-import com.stimednp.aplikasimoviecataloguesub4.mydbentity.FavMoviesModel;
+import com.stimednp.aplikasimoviecataloguesub4.mydbentity.MoviesModel;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.FavMoviesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.MovieItems;
 import com.stimednp.aplikasimoviecataloguesub4.mymodel.TvShowItems;
@@ -37,7 +38,18 @@ import com.stimednp.aplikasimoviecataloguesub4.roomdb.TvShowRoomDatabase;
 import com.stimednp.aplikasimoviecataloguesub4.roomtvshow.TvShow;
 import com.stimednp.aplikasimoviecataloguesub4.roomtvshow.TvShowAdapter;
 
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_BACK_PATH;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_OVERVIEW;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_POSTER_PATH;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_RELEASE_DATE;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_TITLE;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_VOTE_AVERAGE;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_VOTE_COUNT;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.CONTENT_URI;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.ID;
+
 public class DetailsMovieActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String TAG = DetailsMovieActivity.class.getSimpleName();
     public static final String EXTRA_MOVIE = "extra_movie";
     public static final String EXTRA_WHERE_FROM = "extra_where_from";
     public static final int REQUEST_ADD = 100;
@@ -61,10 +73,11 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
     private int moviesId;
     private String tvShowTitle, tvShowDesc, tvShowRelease, tvShowRating, tvShowVoteCount, tvShowUrlPhoto, tvShowUrlBg;
 
-    private FavMoviesModel favMoviesModel;
+    private MoviesModel moviesModel;
     private int position;
-    private FavMoviesHelper favMoviesHelper;
+    //    private MoviesHelper moviesHelper;
     private boolean isEdit = false;
+    private Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,19 +108,35 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         checkingFavorite();
 
         String whereFrom = getIntent().getStringExtra(EXTRA_WHERE_FROM);
-        favMoviesHelper = FavMoviesHelper.getInstance(getApplicationContext());
-        favMoviesHelper.open();
+//        moviesHelper = MoviesHelper.getInstance(getApplicationContext());
+//        moviesHelper.open();
 
-        if (whereFrom.equals(FavMoviesAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))){
-            favMoviesModel = getIntent().getParcelableExtra(EXTRA_MOVIE);
-            if (favMoviesModel != null){
+        if (whereFrom.equals(FavMoviesAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))) {
+            moviesModel = getIntent().getParcelableExtra(EXTRA_MOVIE);
+            if (moviesModel != null) {
                 position = getIntent().getIntExtra(EXTRA_POSITION, 0);
                 isEdit = true;
             } else {
-                favMoviesModel = new FavMoviesModel();
+                moviesModel = new MoviesModel();
             }
         }
 
+
+//         Secara fungsionalitas masih sama akan tetapi kita tidak menggunakan obyek Parcelable untuk ditampilkan di dalam
+//         DetailsMovieActivity, melainkan menggunakan Uri untuk ambil data kembali dari  ContentProvider
+
+
+//        if (whereFrom.equals(FavMoviesAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))) {
+        uri = getIntent().getData();
+        Log.d(TAG, "DEMoviesByTitle URI 1 : " + uri);
+        if (uri != null) {
+            Log.d(TAG, "DEMoviesByTitle URI 2 : " + uri);
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) moviesModel = new MoviesModel(cursor);
+                cursor.close();
+            }
+        }
     }
 
     private void getDataParceable() { //this is get DATA when click
@@ -118,6 +147,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         if (whereFrom.equals(MovieItemsAdapter.TAG)) { //for details TabMoviesFragment
             MovieItems movieItems = getIntent().getParcelableExtra(EXTRA_MOVIE);
             if (movieItems != null) {
+                moviesId = movieItems.getId();
                 movieTitle = movieItems.getTitle();
                 keyFavorite = movieTitle; //key
                 movieDesc = movieItems.getOverview();
@@ -164,17 +194,17 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 Glide.with(getApplicationContext()).load(pathImg + tvShowUrlBg).into(imgViewBg);
             }
         } else if (whereFrom.equals(FavMoviesAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))) { //for details MoviesAdapter from dbroom
-            FavMoviesModel favMoviesModel = getIntent().getParcelableExtra(EXTRA_MOVIE);
-            if (favMoviesModel != null) {
-                moviesId = favMoviesModel.getId();
-                movieTitle = favMoviesModel.getTitle();
+            MoviesModel moviesModel = getIntent().getParcelableExtra(EXTRA_MOVIE);
+            if (moviesModel != null) {
+                moviesId = moviesModel.getId();
+                movieTitle = moviesModel.getTitle();
                 keyFavorite = movieTitle; //key
-                movieDesc = favMoviesModel.getOverview();
-                movieRelease = favMoviesModel.getRelease_date();
-                movieRating = favMoviesModel.getVote_average().toString();
-                movieVoteCount = favMoviesModel.getVote_count();
-                movieUrlPhoto = favMoviesModel.getPoster_path();
-                movieUrlBg = favMoviesModel.getBackdrop_path();
+                movieDesc = moviesModel.getOverview();
+                movieRelease = moviesModel.getRelease_date();
+                movieRating = moviesModel.getVote_average().toString();
+                movieVoteCount = moviesModel.getVote_count();
+                movieUrlPhoto = moviesModel.getPoster_path();
+                movieUrlBg = moviesModel.getBackdrop_path();
 
                 AllOtherMethod allOtherMethod = new AllOtherMethod();
                 String movieDate = allOtherMethod.changeFormatDate(movieRelease);
@@ -187,19 +217,6 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 tvMovieVoteCount.setText(movieVoteCount);
                 Glide.with(getApplicationContext()).load(pathImg + movieUrlPhoto).into(imgViewFromUrl);
                 Glide.with(getApplicationContext()).load(pathImg + movieUrlBg).into(imgViewBg);
-
-//                Intent intent = new Intent();
-//                intent.putExtra(EXTRA_MOVIE, favMoviesModel);
-//                intent.putExtra(EXTRA_POSITION, position);
-//
-//                if (isEdit){
-//                    long result = favMoviesHelper.getAllMovies().size();
-//                    if (result > 0){
-//                        setResult(RESULT_ADD, intent);
-//                    } else {
-//                        Toast.makeText(this, "GAGAL", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
             }
         } else if (whereFrom.equals(TvShowAdapter.TAG)) { //for details TvShowAdapter from roomdb
             TvShow tvShow = getIntent().getParcelableExtra(EXTRA_MOVIE);
@@ -239,93 +256,42 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-
-
-    private void insertFavorite() {
-        favMoviesModel.setTitle(movieTitle);
-        favMoviesModel.setOverview(movieDesc);
-        favMoviesModel.setRelease_date(movieRelease);
-        favMoviesModel.setVote_average(Double.parseDouble(movieRating));
-        favMoviesModel.setVote_count(movieVoteCount);
-        favMoviesModel.setPoster_path(movieUrlPhoto);
-        favMoviesModel.setBackdrop_path(movieUrlBg);
-
+    private void setMovies() { //Insert
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_MOVIE, favMoviesModel);
+        intent.putExtra(EXTRA_MOVIE, moviesModel);
         intent.putExtra(EXTRA_POSITION, position);
-        Log.d("INI", "insertFavorite: " + favMoviesModel);
-        int result = (int) favMoviesHelper.insertMovie(favMoviesModel);
-        if (result > 0) {
-            favMoviesModel.setId(result);
-            setResult(RESULT_ADD, intent);
-        }
+
+        MoviesModel moviesModel = new MoviesModel();
+        moviesModel.setId(moviesId);
+        moviesModel.setTitle(movieTitle);
+        moviesModel.setRelease_date(movieRelease);
+        moviesModel.setVote_average(Double.parseDouble(movieRating));
+        moviesModel.setVote_count(movieVoteCount);
+        moviesModel.setOverview(movieDesc);
+        moviesModel.setPoster_path(movieUrlPhoto);
+        moviesModel.setBackdrop_path(movieUrlBg);
+
+        ContentValues values = new ContentValues();
+        values.put(ID, moviesId);
+        values.put(COLUMN_TITLE, movieTitle);
+        values.put(COLUMN_RELEASE_DATE, movieRelease);
+        values.put(COLUMN_VOTE_AVERAGE, movieRating);
+        values.put(COLUMN_VOTE_COUNT, movieVoteCount);
+        values.put(COLUMN_OVERVIEW, movieDesc);
+        values.put(COLUMN_POSTER_PATH, movieUrlPhoto);
+        values.put(COLUMN_BACK_PATH, movieUrlBg);
+
+        getContentResolver().insert(CONTENT_URI, values);
+        showSnackBar(movieTitle+" "+strMsgSuccessInsert);
+        setResult(RESULT_ADD, intent);
     }
 
-    //Room
-    private void setMovies() {
-        @SuppressLint("StaticFieldLeak")
-        class SetMovies extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                FavMoviesModel favMoviesModel = new FavMoviesModel();
-                favMoviesModel.setTitle(movieTitle);
-                favMoviesModel.setOverview(movieDesc);
-                favMoviesModel.setRelease_date(movieRelease);
-                favMoviesModel.setVote_average(Double.parseDouble(movieRating));
-                favMoviesModel.setVote_count(movieVoteCount);
-                favMoviesModel.setPoster_path(movieUrlPhoto);
-                favMoviesModel.setBackdrop_path(movieUrlBg);
-
-                Intent intent = new Intent();
-                intent.putExtra(EXTRA_MOVIE, favMoviesModel);
-                intent.putExtra(EXTRA_POSITION, position);
-
-                long result = favMoviesHelper.insertMovie(favMoviesModel);
-                if (result > 0) {
-                    favMoviesModel.setId((int) result);
-                    setResult(RESULT_ADD, intent);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Snackbar snackbar = Snackbar.make(containerCoord, strMsgSuccessInsert, Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        }
-        SetMovies setMovies = new SetMovies();
-        setMovies.execute();
-    }
-
-    private void deleteMoviesByTitle() {
-        @SuppressLint("StaticFieldLeak")
-        class DeleteMovies extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                long result = favMoviesHelper.deleteMovieByTitle(movieTitle);
-                Log.d("INIII", "deleteMoviesByTitle: "+result+" :: "+movieTitle+" :: "+position);
-                if (result > 0) {
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_POSITION, position);
-                    setResult(RESULT_DELETE, intent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Gagal Hapus", Toast.LENGTH_SHORT).show();
-                }
-//                MoviesRoomDatabase.getDatabase(getApplicationContext()).moviesDao().deleteByTitle(movieTitle);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Snackbar snackbar = Snackbar.make(containerCoord, strMsgSuccessDelete, Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        }
-        DeleteMovies deleteMoviesByTitle = new DeleteMovies();
-        deleteMoviesByTitle.execute();
+    private void deleteMovies() { //delete
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_POSITION, 0);
+        getContentResolver().delete(uri, null, null);
+        showSnackBar(movieTitle+" "+strMsgSuccessDelete);
+        setResult(RESULT_DELETE, intent);
     }
 
     private void setTvShows() {
@@ -349,8 +315,7 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Snackbar snackbar = Snackbar.make(containerCoord, strMsgSuccessInsert, Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                showSnackBar(tvShowTitle+" "+strMsgSuccessInsert);
             }
         }
         SetTvShow setTvShow = new SetTvShow();
@@ -369,12 +334,16 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Snackbar snackbar = Snackbar.make(containerCoord, strMsgSuccessDelete, Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                showSnackBar(tvShowTitle+" "+strMsgSuccessDelete);
             }
         }
         DeleteTvShowByTitle deleteTvShowByTitle = new DeleteTvShowByTitle();
         deleteTvShowByTitle.execute();
+    }
+
+    private void showSnackBar(String msg){
+        Snackbar snackbar = Snackbar.make(containerCoord, msg, Snackbar.LENGTH_SHORT);
+        snackbar.show();
     }
 
     @Override
@@ -404,8 +373,8 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             tesPref(isFavorite);
             checkingFavorite();
             //delete
-            if ((whereFrom.equals(FavMoviesFragment.TAG) || (whereFrom.equals(FavMoviesAdapter.TAG))  || (whereFrom.equals(MovieItemsAdapter.TAG)))) {
-                deleteMoviesByTitle(); //deleteMovies
+            if ((whereFrom.equals(FavMoviesFragment.TAG) || (whereFrom.equals(FavMoviesAdapter.TAG)) || (whereFrom.equals(MovieItemsAdapter.TAG)))) {
+                deleteMovies(); //deleteMovies
             } else if ((whereFrom.equals(TvShowItemsAdapter.TAG)) || (whereFrom.equals(TvShowAdapter.TAG))) {
                 deleteTvShowByTitle(); //deleteTvShow
             }
@@ -416,12 +385,10 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             checkingFavorite();
             //insert
             if ((whereFrom.equals(FavMoviesFragment.TAG) || (whereFrom.equals(FavMoviesAdapter.TAG)) || (whereFrom.equals(MovieItemsAdapter.TAG)))) {
-//                insertFavorite();
                 setMovies(); //insertMovies
             } else if ((whereFrom.equals(TvShowItemsAdapter.TAG)) || (whereFrom.equals(TvShowAdapter.TAG))) {
                 setTvShows(); //insertTvShow
             }
-
         }
     }
 
@@ -434,5 +401,11 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
             fabFavoriteFalse.setImageResource(R.drawable.ic_favorite_border_before);
             isCheckFavorite = false;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        moviesHelper.close();
     }
 }

@@ -16,7 +16,7 @@
 //public class Movies implements Parcelable {
 //
 //    public static final String TABLE_NAME = "movies";
-//    static final String COLUMN_ID = BaseColumns._ID;
+//    static final String COLUMN_ID = BaseColumns.ID;
 //    private static final String COLUMN_TITLE = "title";
 //    private static final String COLUMN_ORI_TITLE = "original_title";
 //    private static final String COLUMN_RELEASE_DATE = "release_date";

@@ -1,8 +1,6 @@
 package com.stimednp.aplikasimoviecataloguesub4.mydb;
 
-import com.stimednp.aplikasimoviecataloguesub4.mydbentity.FavMoviesModel;
-
-import java.util.ArrayList;
+import android.database.Cursor;
 
 /**
  * Created by rivaldy on 8/19/2019.
@@ -10,5 +8,6 @@ import java.util.ArrayList;
 
 public interface LoadFavMoviesCallback {
     void preExecute();
-    void postExecute(ArrayList<FavMoviesModel> favMoviesModelList);
+    void postExecute(Cursor cursor);
+//    void postExecute(ArrayList<MoviesModel> moviesModelList);
 }

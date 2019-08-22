@@ -1,6 +1,7 @@
 package com.stimednp.aplikasimoviecataloguesub4.mydb;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -10,21 +11,21 @@ import androidx.annotation.Nullable;
  * Created by rivaldy on 8/19/2019.
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+    public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static String DATABASE_NAME = "db_list_movie";
     private static final int DATABASE_VERSION = 1;
     private static final String SQL_CREATE_TABLE_MOVIE = String.format("CREATE TABLE %s" +
-                    "(%s INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL)",
-            DatabaseContract.TABLE_MOVIE,
-            DatabaseContract.MovieColumns._ID,
+                    "(%s INTEGER PRIMARY KEY," +
+                    "%s TEXT," +
+                    "%s TEXT," +
+                    "%s TEXT," +
+                    "%s TEXT," +
+                    "%s TEXT," +
+                    "%s TEXT," +
+                    "%s TEXT)",
+            DatabaseContract.MovieColumns.TABLE_NAME,
+            DatabaseContract.MovieColumns.ID,
             DatabaseContract.MovieColumns.COLUMN_TITLE,
             DatabaseContract.MovieColumns.COLUMN_RELEASE_DATE,
             DatabaseContract.MovieColumns.COLUMN_VOTE_AVERAGE,
@@ -35,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     );
 
-    public DatabaseHelper(Context context) {
+    DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -46,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_MOVIE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MovieColumns.TABLE_NAME);
         onCreate(db);
     }
 }
