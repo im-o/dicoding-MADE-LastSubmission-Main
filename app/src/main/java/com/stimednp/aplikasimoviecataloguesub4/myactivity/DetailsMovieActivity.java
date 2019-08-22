@@ -183,9 +183,9 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 tvMovieRating.setText(tvShowRating);
                 tvMovieVoteCount.setText(tvShowVoteCount);
                 if (tvShowUrlPhoto != null)
-                    Glide.with(getApplicationContext()).load(pathImg + movieUrlPhoto).into(imgViewFromUrl);
+                    Glide.with(getApplicationContext()).load(pathImg + tvShowUrlPhoto).into(imgViewFromUrl);
                 if (tvShowUrlBg != null)
-                    Glide.with(getApplicationContext()).load(pathImg + movieUrlBg).into(imgViewBg);
+                    Glide.with(getApplicationContext()).load(pathImg + tvShowUrlBg).into(imgViewBg);
             }
         } else if (whereFrom.equals(FavMoviesAdapter.TAG) || (whereFrom.equals(FavMoviesFragment.TAG))) { //for details MoviesAdapter from dbroom
             MoviesModel moviesModel = getIntent().getParcelableExtra(EXTRA_MOVIE);
@@ -236,9 +236,9 @@ public class DetailsMovieActivity extends AppCompatActivity implements View.OnCl
                 tvMovieRating.setText(tvShowRating);
                 tvMovieVoteCount.setText(tvShowVoteCount);
                 if (tvShowUrlPhoto != null)
-                    Glide.with(getApplicationContext()).load(pathImg + movieUrlPhoto).into(imgViewFromUrl);
+                    Glide.with(getApplicationContext()).load(pathImg + tvShowUrlPhoto).into(imgViewFromUrl);
                 if (tvShowUrlBg != null)
-                    Glide.with(getApplicationContext()).load(pathImg + movieUrlBg).into(imgViewBg);
+                    Glide.with(getApplicationContext()).load(pathImg + tvShowUrlBg).into(imgViewBg);
             }
         }
     }
