@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.stimednp.aplikasimoviecataloguesub4.R;
 
-public class ReminderActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar toolbarReminder;
     private SwitchCompat switchDaily, switchRelease;
     private LinearLayout llBtnSettLang;
@@ -31,7 +31,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reminder);
+        setContentView(R.layout.activity_settings);
         toolbarReminder = findViewById(R.id.toolbar_reminder);
         switchDaily = findViewById(R.id.switch_daily_reminder);
         switchRelease = findViewById(R.id.switch_release_reminder);

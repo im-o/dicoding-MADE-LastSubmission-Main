@@ -6,14 +6,7 @@ import com.stimednp.aplikasimoviecataloguesub4.mydbentity.MoviesModel;
 
 import java.util.ArrayList;
 
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_BACK_PATH;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_OVERVIEW;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_POSTER_PATH;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_RELEASE_DATE;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_TITLE;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_VOTE_AVERAGE;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.COLUMN_VOTE_COUNT;
-import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.ID;
+import static com.stimednp.aplikasimoviecataloguesub4.mydb.DatabaseContract.MovieColumns.*;
 
 /**
  * Created by rivaldy on 8/20/2019.

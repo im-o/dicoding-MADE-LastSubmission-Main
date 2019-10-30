@@ -24,7 +24,7 @@
         android:roundIcon="@drawable/ic_primary_green_moviedb"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".myalarm.ReminderActivity"></activity>
+        <activity android:name=".myalarm.SettingsActivity"></activity>
 
         <service
             android:name=".mystackwidget.StackWidgetService"

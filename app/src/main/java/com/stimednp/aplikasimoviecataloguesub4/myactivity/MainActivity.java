@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.stimednp.aplikasimoviecataloguesub4.R;
-import com.stimednp.aplikasimoviecataloguesub4.myalarm.ReminderActivity;
+import com.stimednp.aplikasimoviecataloguesub4.myalarm.SettingsActivity;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavFavoritesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavMoviesFragment;
 import com.stimednp.aplikasimoviecataloguesub4.myfragment.NavTvShowFragment;
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.itemm_reminder) {
-            Intent intent = new Intent(MainActivity.this, ReminderActivity.class);
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
